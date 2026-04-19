@@ -37,7 +37,7 @@ var camera_zooms = {
 	"center": Vector2(1.0, 1.0),
 	"left": Vector2(1.0, 1.0),
 	"right": Vector2(1.0, 1.0),
-	"down": Vector2(1.4, 1.4)
+	"down": Vector2(2, 2)
 }
 
 var camera_tween: Tween

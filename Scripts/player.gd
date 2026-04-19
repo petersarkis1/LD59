@@ -9,7 +9,7 @@ signal hand_signaled
 
 const HAND_DOWN = preload("res://Assets/Player/RestingHands/hand_rest_slideR.png")
 const HAND_UP = preload("res://Assets/Player/RaisedHands/hands_neutral_moveL.png")
-const POINTER_OFFSET = Vector2(160, 70)
+const POINTER_OFFSET = Vector2(60, 90)
 var hand_change_y_threshold: int = 500
 var is_on_phone: bool = false
 
@@ -34,7 +34,7 @@ var active_hand: String = "Left"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	left_hand_original_pos = left_hand.position
 	right_hand_original_pos = right_hand.position
 	left_hand_phone_original_pos = left_hand_phone.position
@@ -153,6 +153,10 @@ func _input(event: InputEvent) -> void:
 			shake_active_hand()
 
 func shake_active_hand() -> void:
+	
+	if is_on_phone:
+		return
+	
 	var hand_to_shake: Sprite2D = null
 	
 	# Determine which hand is active

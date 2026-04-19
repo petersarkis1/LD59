@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b56cy0xmcuvkf" path="res://Assets/Player/RestingHands/hand_rest_slideR.png" id="3_fkybt"]
 [ext_resource type="Texture2D" uid="uid://5k11fceiee5i" path="res://Assets/Player/PhoneHand/busted phone transperency.png" id="4_x3wgy"]
 [ext_resource type="Texture2D" uid="uid://dw7x4r4l3tyf" path="res://Assets/Player/PhoneHand/phone_point.png" id="5_fkybt"]
+[ext_resource type="Script" uid="uid://dvgyntx220xme" path="res://Scripts/phone/phone.gd" id="5_x3wgy"]
 
 [node name="Player" type="Node2D" unique_id=1459030903]
 script = ExtResource("1_cvnsp")
@@ -26,6 +27,14 @@ position = Vector2(405.99997, 442.99997)
 rotation = -0.6981317
 scale = Vector2(-0.16, 0.16)
 texture = ExtResource("4_x3wgy")
+
+[node name="Node2D" type="Node2D" parent="LeftHand_Phone" unique_id=1224081279]
+z_index = -1
+position = Vector2(-136.43478, -823.7789)
+rotation = -0.20943952
+scale = Vector2(-2.06, 2.06)
+script = ExtResource("5_x3wgy")
+phone_size = Vector2(338, 750)
 
 [node name="RightHand_Phone" type="Sprite2D" parent="." unique_id=1705802193]
 position = Vector2(794, 639)

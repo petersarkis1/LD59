@@ -204,3 +204,7 @@ func _on_phone_finished() -> void:
 	phone_timer.start(phone_cooldown_timeout)
 	phone_ring.stop()
 	phone_buzz.stop()
+
+
+func _on_date_start_timer_timeout() -> void:
+	date_dialog.stop()

@@ -42,4 +42,4 @@ pitch_scale = 0.75
 [connection signal="camera_view_changed" from="." to="Camera/Player" method="_on_restaurant_camera_view_changed"]
 [connection signal="hand_signaled" from="Camera/Player" to="." method="_on_player_hand_signaled"]
 [connection signal="timeout" from="PhoneTimer" to="." method="_on_phone_start_timer_timeout"]
-[connection signal="timeout" from="DateTimer" to="." method="_on_phone_start_timer_timeout"]
+[connection signal="timeout" from="DateTimer" to="." method="_on_date_start_timer_timeout"]

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dwjturm17fsld"]
+
+[ext_resource type="Script" uid="uid://cc0mxhuxl35jj" path="res://Scripts/waiter.gd" id="1_yolb7"]
+[ext_resource type="Texture2D" uid="uid://cvq06thogplfe" path="res://Assets/Waiter/waiter.png" id="2_4lx1f"]
+[ext_resource type="Texture2D" uid="uid://fbdnncmh2rm3" path="res://Assets/Waiter/epoint.png" id="3_4lx1f"]
+
+[node name="Waiter" type="Node2D" unique_id=194640644]
+script = ExtResource("1_yolb7")
+
+[node name="Waiter" type="Sprite2D" parent="." unique_id=1610026970]
+texture = ExtResource("2_4lx1f")
+
+[node name="Epoint" type="Sprite2D" parent="." unique_id=1183597427]
+visible = false
+position = Vector2(-8, -224)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_4lx1f")

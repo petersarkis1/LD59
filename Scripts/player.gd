@@ -9,7 +9,7 @@ signal hand_signaled
 
 const HAND_DOWN = preload("res://Assets/Player/RestingHands/hand_rest_slideR.png")
 const HAND_UP = preload("res://Assets/Player/RaisedHands/hands_neutral_moveL.png")
-const POINTER_OFFSET = Vector2(60, 90)
+const POINTER_OFFSET = Vector2(115, 102)
 var hand_change_y_threshold: int = 500
 var is_on_phone: bool = false
 
@@ -17,6 +17,7 @@ var left_hand_original_pos: Vector2
 var right_hand_original_pos: Vector2
 var left_hand_phone_original_pos: Vector2
 var right_hand_phone_original_pos: Vector2
+var right_hand_phone_original_rotation: float
 var last_controlled_side: String = ""
 var left_hand_returning: bool = false
 var right_hand_returning: bool = false
@@ -31,6 +32,9 @@ var phone_transition_duration: float = 0.3
 var is_transitioning: bool = false
 var active_transition_tweens: Array[Tween] = []
 var active_hand: String = "Left"
+var is_shaking: bool = false
+var phone_tilt_tween: Tween = null
+var is_phone_tilted: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -39,6 +43,7 @@ func _ready() -> void:
 	right_hand_original_pos = right_hand.position
 	left_hand_phone_original_pos = left_hand_phone.position
 	right_hand_phone_original_pos = right_hand_phone.position
+	right_hand_phone_original_rotation = right_hand_phone.rotation
 	
 	# Start with phone hands hidden below viewport
 	var viewport_height = get_viewport_rect().size.y
@@ -148,13 +153,18 @@ func _process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			emit_signal("hand_signaled", active_hand)
-			shake_active_hand()
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				emit_signal("hand_signaled", active_hand)
+				shake_active_hand()
+			else:
+				# Handle mouse button release
+				if is_on_phone and is_phone_tilted:
+					tween_phone_back()
 
 func shake_active_hand() -> void:
 	
-	if is_on_phone:
+	if is_shaking:
 		return
 	
 	var hand_to_shake: Sprite2D = null
@@ -162,12 +172,26 @@ func shake_active_hand() -> void:
 	# Determine which hand is active
 	if is_on_phone:
 		hand_to_shake = right_hand_phone
+		# Special behavior for phone: tween to 2 degrees while held
+		if phone_tilt_tween and phone_tilt_tween.is_valid():
+			phone_tilt_tween.kill()
+		
+		phone_tilt_tween = create_tween()
+		phone_tilt_tween.set_trans(Tween.TRANS_SINE)
+		phone_tilt_tween.set_ease(Tween.EASE_IN_OUT)
+		
+		var target_angle = right_hand_phone_original_rotation - deg_to_rad(2.0)
+		phone_tilt_tween.tween_property(hand_to_shake, "rotation", target_angle, 0.2)
+		is_phone_tilted = true
+		return
 	elif last_controlled_side == "left":
 		hand_to_shake = left_hand
 	elif last_controlled_side == "right":
 		hand_to_shake = right_hand
 	else:
 		return
+	
+	is_shaking = true
 	
 	# Create shake animation
 	var shake_tween = create_tween()
@@ -186,6 +210,19 @@ func shake_active_hand() -> void:
 	shake_tween.tween_property(hand_to_shake, "rotation", original_rotation - shake_angle, shake_duration)
 	shake_tween.tween_property(hand_to_shake, "rotation", original_rotation + shake_angle, shake_duration)
 	shake_tween.tween_property(hand_to_shake, "rotation", original_rotation, shake_duration)
+	
+	shake_tween.finished.connect(func(): is_shaking = false)
+
+func tween_phone_back() -> void:
+	if phone_tilt_tween and phone_tilt_tween.is_valid():
+		phone_tilt_tween.kill()
+	
+	phone_tilt_tween = create_tween()
+	phone_tilt_tween.set_trans(Tween.TRANS_SINE)
+	phone_tilt_tween.set_ease(Tween.EASE_IN_OUT)
+	
+	phone_tilt_tween.tween_property(right_hand_phone, "rotation", right_hand_phone_original_rotation, 0.2)
+	is_phone_tilted = false
 
 func _on_restaurant_camera_view_changed(view_name: String) -> void:
 	if view_name == "down":

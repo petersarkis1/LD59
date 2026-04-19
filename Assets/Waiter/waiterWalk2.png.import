@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dw7x4r4l3tyf"
-path="res://.godot/imported/phone_point.png-beb5cedf9776c87030c774a1854243e5.ctex"
+uid="uid://c6i4cpkscey3b"
+path="res://.godot/imported/waiterWalk2.png-a3e85d402fd1118412731253de5a763e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Player/PhoneHand/phone_point.png"
-dest_files=["res://.godot/imported/phone_point.png-beb5cedf9776c87030c774a1854243e5.ctex"]
+source_file="res://Assets/Waiter/waiterWalk2.png"
+dest_files=["res://.godot/imported/waiterWalk2.png-a3e85d402fd1118412731253de5a763e.ctex"]
 
 [params]
 

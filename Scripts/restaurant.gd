@@ -13,6 +13,17 @@ var waiterSpawnPositions = {
 	"right": Vector2(720, -250)
 }
 
+@onready var phone_timer: Timer = $PhoneTimer
+@onready var phone_ring: AudioStreamPlayer2D = $PhoneRing
+@onready var phone_buzz: AudioStreamPlayer2D = $PhoneBuzz
+
+@onready var date_timer: Timer = $DateTimer
+@onready var date_dialog: AudioStreamPlayer2D = $dateDialog
+var date_cooldown_timeout: int = randi_range(10,20)
+
+var inital_phone_timeout: int = randi_range(15,25)
+var phone_cooldown_timeout: int = randi_range(8,10)
+
 var spawn_interval: float = 5.0
 var waiter_rise_distance: float = 300.0
 var waiter_rise_duration: float = 1.5
@@ -37,25 +48,34 @@ var camera_zooms = {
 	"center": Vector2(1.0, 1.0),
 	"left": Vector2(1.0, 1.0),
 	"right": Vector2(1.0, 1.0),
-	"down": Vector2(2, 2)
+	"down": Vector2(2.5, 2.5)
 }
 
 var camera_tween: Tween
 var background_tween: Tween
 var animation_duration: float = 0.5
 var is_nodding: bool = false
+var is_round_started: bool = false
 
 func _ready() -> void:
+	date_dialog.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	camera.position = camera_positions["center"]
 	camera.zoom = camera_zooms["center"]
+
+func _process(delta: float) -> void:
+	handle_camera_input()
 	
+func startRound() -> void:
+	date_dialog.play()
 	add_child(spawn_timer)
 	spawn_timer.wait_time = spawn_interval
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
 	spawn_timer.start()
-
-func _process(delta: float) -> void:
-	handle_camera_input()
+	
+	#date timer
+	date_timer.start(date_cooldown_timeout)
+	#phone timer
+	phone_timer.start(inital_phone_timeout)
 
 func handle_camera_input() -> void:
 	if Input.is_action_just_pressed("ui_left"):
@@ -161,7 +181,26 @@ func _on_waiter_despawned(lane: String) -> void:
 		current_right_waiter = null
 
 func _on_player_hand_signaled(side: String) -> void:
+	if camera_pos == "center":
+		is_round_started = true
+		startRound()
 	if side == "Left" and is_instance_valid(current_left_waiter):
 		current_left_waiter.is_signaled = true
 	elif side == "Right" and is_instance_valid(current_right_waiter):
 		current_right_waiter.is_signaled = true
+
+
+func _on_phone_start_timer_timeout() -> void:
+	var phone = get_tree().root.get_node("Restaurant/Camera/Player/LeftHand_Phone/Phone")
+	phone.finished.connect(_on_phone_finished)
+	phone.start()
+	
+	phone_ring.play()
+	phone_ring.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	phone_buzz.play()
+	phone_buzz.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+
+func _on_phone_finished() -> void:
+	phone_timer.start(phone_cooldown_timeout)
+	phone_ring.stop()
+	phone_buzz.stop()

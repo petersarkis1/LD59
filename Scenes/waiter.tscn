@@ -1,17 +1,35 @@
 [gd_scene format=3 uid="uid://dwjturm17fsld"]
 
 [ext_resource type="Script" uid="uid://cc0mxhuxl35jj" path="res://Scripts/waiter.gd" id="1_yolb7"]
-[ext_resource type="Texture2D" uid="uid://cvq06thogplfe" path="res://Assets/Waiter/waiter.png" id="2_4lx1f"]
+[ext_resource type="Texture2D" uid="uid://dbx1v5tmccocy" path="res://Assets/Waiter/waiterWalk1.png" id="2_bufwb"]
 [ext_resource type="Texture2D" uid="uid://fbdnncmh2rm3" path="res://Assets/Waiter/epoint.png" id="3_4lx1f"]
+[ext_resource type="Texture2D" uid="uid://c6i4cpkscey3b" path="res://Assets/Waiter/waiterWalk2.png" id="3_k76bp"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l8app"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_bufwb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_k76bp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Waiter" type="Node2D" unique_id=194640644]
 script = ExtResource("1_yolb7")
 
-[node name="Waiter" type="Sprite2D" parent="." unique_id=1610026970]
-texture = ExtResource("2_4lx1f")
+[node name="Waiter" type="AnimatedSprite2D" parent="." unique_id=121597981]
+position = Vector2(0, 72)
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_l8app")
+frame = 1
+frame_progress = 0.86132085
 
 [node name="Epoint" type="Sprite2D" parent="." unique_id=1183597427]
-visible = false
-position = Vector2(-8, -224)
+position = Vector2(-24, -232)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_4lx1f")

@@ -2,6 +2,7 @@ extends Node2D
 
 signal waiter_despawned(lane: String)
 
+@onready var waiter: AnimatedSprite2D = $Waiter
 @onready var epoint: Sprite2D = $Epoint
 
 var initial_scale: float = 0.25
@@ -23,6 +24,8 @@ var move_speed: float = 10.0
 func _ready() -> void:
 	var x_scale = -initial_scale if is_flipped else initial_scale
 	scale = Vector2(x_scale, initial_scale)
+	
+	waiter.play()
 	
 	if epoint:
 		epoint.visible = false

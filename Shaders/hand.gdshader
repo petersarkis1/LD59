@@ -1,12 +1,8 @@
 shader_type canvas_item;
 
-uniform float pixel_size = 32.0;
+uniform float pixel_size : hint_range(1.0, 128.0) = 16.0;
 
 void fragment() {
-    vec2 size = vec2(textureSize(TEXTURE, 0));
-    vec2 uv = UV;
-
-    uv = floor(uv * size / pixel_size) * pixel_size / size;
-
-    COLOR = texture(TEXTURE, uv);
+    vec2 pixel_uv = floor(UV * pixel_size) / pixel_size;
+    COLOR = texture(TEXTURE, pixel_uv);
 }

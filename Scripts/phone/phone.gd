@@ -41,7 +41,7 @@ func _ready() -> void:
 	vp_sprite.position = Vector2.ZERO
 	add_child(vp_sprite)
 
-	start()
+	_show_idle_screen()
 
 func _input(event: InputEvent) -> void:
 	var local_pos = get_local_mouse_position()

@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://b16xeevmuowf0" path="res://Scripts/restaurant.gd" id="1_801p6"]
 [ext_resource type="Texture2D" uid="uid://bld2wa15ivcwx" path="res://Assets/Restaurant/restaurant.png" id="1_yiosm"]
 [ext_resource type="PackedScene" uid="uid://n2cxf8pnky0s" path="res://Scenes/player.tscn" id="2_cradt"]
+[ext_resource type="AudioStream" uid="uid://gtfgisc5mveg" path="res://Assets/Audio/phone ring.wav" id="4_2u40p"]
+[ext_resource type="AudioStream" uid="uid://dbaclhqh4pag" path="res://Assets/Audio/buzz.wav" id="5_7g0bs"]
+[ext_resource type="AudioStream" uid="uid://bh4e0t0aut25s" path="res://Assets/Audio/yapping.wav" id="6_7g0bs"]
 
 [node name="Restaurant" type="Node2D" unique_id=1584030647]
 script = ExtResource("1_801p6")
@@ -18,5 +21,25 @@ z_index = 4096
 [node name="Player" parent="Camera" unique_id=1459030903 instance=ExtResource("2_cradt")]
 position = Vector2(-512, -384)
 
+[node name="PhoneTimer" type="Timer" parent="." unique_id=2125315911]
+one_shot = true
+
+[node name="DateTimer" type="Timer" parent="." unique_id=1563596530]
+one_shot = true
+
+[node name="PhoneRing" type="AudioStreamPlayer2D" parent="." unique_id=217438622]
+stream = ExtResource("4_2u40p")
+volume_db = -16.361
+
+[node name="PhoneBuzz" type="AudioStreamPlayer2D" parent="." unique_id=759106381]
+stream = ExtResource("5_7g0bs")
+
+[node name="dateDialog" type="AudioStreamPlayer2D" parent="." unique_id=1744402183]
+stream = ExtResource("6_7g0bs")
+volume_db = -13.944
+pitch_scale = 0.75
+
 [connection signal="camera_view_changed" from="." to="Camera/Player" method="_on_restaurant_camera_view_changed"]
 [connection signal="hand_signaled" from="Camera/Player" to="." method="_on_player_hand_signaled"]
+[connection signal="timeout" from="PhoneTimer" to="." method="_on_phone_start_timer_timeout"]
+[connection signal="timeout" from="DateTimer" to="." method="_on_phone_start_timer_timeout"]

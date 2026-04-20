@@ -60,7 +60,8 @@ const C_MENUBAR    := Color(0.753, 0.753, 0.753)
 
 const TOS_FILES := [
 	"res://Assets/Phone/tos/axolotl.txt",
-	"res://Assets/Phone/tos/montypyt.txt"
+	"res://Assets/Phone/tos/montypyt.txt", 
+	"res://Assets/Phone/tos/beemovie.txt"
 ]
 
 var TOS_LINES: Array[String] = []

@@ -40,7 +40,7 @@ func setup(pos: Vector2, size: Vector2) -> void:
 	var input_span = min(size.x * 0.85, remaining)
 	cell_size = input_span / GRID
 	var input_x = pos.x + (size.x - input_span) / 2.0
-	var input_bottom_y = pos.y + size.y - 20.0
+	var input_bottom_y = pos.y + size.y - 100.0
 	var input_y = max(ref_bottom, input_bottom_y - input_span)
 	input_origin = Vector2(input_x, input_y)
 
@@ -111,7 +111,9 @@ func _draw() -> void:
 	var ref_label = "Pattern"
 	var ref_label_size = ThemeDB.fallback_font.get_string_size(ref_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11)
 	draw_string(ThemeDB.fallback_font, ref_origin + Vector2((ref_cell_size * GRID - ref_label_size.x) / 2.0, -6), ref_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color.WHITE)
-	draw_string(ThemeDB.fallback_font, input_origin + Vector2(0, -6), "Draw it", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
+	var draw_label := "Draw the pattern"
+	var draw_lsz := ThemeDB.fallback_font.get_string_size(draw_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 24)
+	draw_string(ThemeDB.fallback_font, input_origin + Vector2((cell_size * GRID - draw_lsz.x) * 0.5, -12), draw_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color.WHITE)
 
 	_draw_grid(ref_origin, ref_cell_size, target_pattern, true)
 	_draw_grid(input_origin, cell_size, current_pattern, false)

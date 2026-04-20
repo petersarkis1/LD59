@@ -20,10 +20,49 @@ var _current_game: Node2D = null
 var _tap_player: AudioStreamPlayer
 var _sub_viewport: SubViewport
 
+var _reflection_texture: Texture2D
+
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, phone_size), Color.BLACK, true)
+	if _state == State.IDLE and _reflection_texture:
+		draw_texture_rect(_reflection_texture, Rect2(Vector2.ZERO, phone_size), false, Color(1, 1, 1, 0.15))
+	if _state == State.FINISHED:
+		_draw_silenced_bell()
+
+
+func _draw_silenced_bell() -> void:
+	var cx := phone_size.x / 2.0
+	var cy := phone_size.y / 2.0 - 30.0
+	var color := Color.WHITE
+	var lw := 5.0
+
+	var dome_r := 50.0
+	var dome_cy := cy - 10.0
+
+	# Handle
+	draw_rect(Rect2(cx - 8, dome_cy - dome_r - 18, 16, 20), color, true)
+
+	# Dome (top semicircle: PI → 2*PI draws through top in Godot's Y-down space)
+	draw_arc(Vector2(cx, dome_cy), dome_r, PI, 2.0 * PI, 48, color, lw)
+
+	# Flared sides
+	var flare := 14.0
+	var body_bottom := dome_cy + 52.0
+	draw_line(Vector2(cx - dome_r, dome_cy), Vector2(cx - dome_r - flare, body_bottom), color, lw)
+	draw_line(Vector2(cx + dome_r, dome_cy), Vector2(cx + dome_r + flare, body_bottom), color, lw)
+
+	# Rim
+	draw_line(Vector2(cx - dome_r - flare - 10, body_bottom), Vector2(cx + dome_r + flare + 10, body_bottom), color, lw + 2.0)
+
+	# Clapper
+	draw_circle(Vector2(cx, body_bottom + 14.0), 7.0, color)
+
+	# Slash
+	var s := 78.0
+	draw_line(Vector2(cx - s, cy + s), Vector2(cx + s, cy - s), Color.RED, lw + 1.0)
 
 func _ready() -> void:
+	_reflection_texture = load("res://Assets/Phone/reflection.png")
 	_tap_player = AudioStreamPlayer.new()
 	_tap_player.stream = load("res://Assets/Phone/phone-tap.wav")
 	add_child(_tap_player)
@@ -73,6 +112,7 @@ func _clear_screen() -> void:
 func _transition(next: State) -> void:
 	_clear_screen()
 	_state = next
+	queue_redraw()
 	match next:
 		State.IDLE:
 			_show_idle_screen()
@@ -83,12 +123,7 @@ func _transition(next: State) -> void:
 
 
 func _show_idle_screen() -> void:
-	var label = Label.new()
-	label.text = "Idle"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_sub_viewport.add_child(label)
+	pass
 
 
 func _start_game() -> void:
@@ -111,10 +146,12 @@ func _on_game_finished() -> void:
 
 func _show_finish_screen() -> void:
 	var label = Label.new()
-	label.text = "Done!"
+	label.text = "Phone silenced"
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	label.add_theme_font_size_override("font_size", 22)
+	label.add_theme_color_override("font_color", Color.WHITE)
+	label.position = Vector2(0, phone_size.y / 2.0 + 50.0)
+	label.size = Vector2(phone_size.x, 50)
 	_sub_viewport.add_child(label)
 	await get_tree().create_timer(2.0).timeout
 	_transition(State.IDLE)

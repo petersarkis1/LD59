@@ -2,13 +2,18 @@ extends Node2D
 
 signal hand_signaled
 
-@onready var left_hand: Sprite2D = $LeftHand
-@onready var right_hand: Sprite2D = $RightHand
-@onready var left_hand_phone: Sprite2D = $LeftHand_Phone
-@onready var right_hand_phone: Sprite2D = $RightHand_Phone
+@onready var left_hand: Sprite2D = $Left/LeftHand
+@onready var right_hand: Sprite2D = $Right/RightHand
+@onready var left_hand_phone: Sprite2D = $Left/LeftHand_Phone
+@onready var right_hand_phone: Sprite2D = $Right/RightHand_Phone
+@onready var left_sleeve: Sprite2D = $Left/LeftSleeve
+@onready var right_sleeve: Sprite2D = $Right/RightSleeve
 
-const HAND_DOWN = preload("res://Assets/Player/RestingHands/hand_rest_slideR.png")
-const HAND_UP = preload("res://Assets/Player/RaisedHands/hands_neutral_moveL.png")
+
+const HAND_DOWN = preload("res://Assets/Player/RestingHands/HAND_DOWN_A.png")
+const HAND_DOWN_B = preload("res://Assets/Player/RestingHands/HAND_DOWN_B.png")
+const HAND_UP = preload("res://Assets/Player/RaisedHands/HAND_UP_A.png")
+const HAND_UP_B = preload("res://Assets/Player/RaisedHands/HAND_UP_B.png")
 const POINTER_OFFSET = Vector2(115, 102)
 var hand_change_y_threshold: int = 500
 var is_on_phone: bool = false
@@ -18,6 +23,8 @@ var right_hand_original_pos: Vector2
 var left_hand_phone_original_pos: Vector2
 var right_hand_phone_original_pos: Vector2
 var right_hand_phone_original_rotation: float
+var left_sleeve_offset: Vector2
+var right_sleeve_offset: Vector2
 var last_controlled_side: String = ""
 var left_hand_returning: bool = false
 var right_hand_returning: bool = false
@@ -35,6 +42,9 @@ var active_hand: String = "Left"
 var is_shaking: bool = false
 var phone_tilt_tween: Tween = null
 var is_phone_tilted: bool = false
+var flicker_timer: float = 0.0
+var flicker_interval: float = 0.1
+var use_b_variant: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -44,6 +54,10 @@ func _ready() -> void:
 	left_hand_phone_original_pos = left_hand_phone.position
 	right_hand_phone_original_pos = right_hand_phone.position
 	right_hand_phone_original_rotation = right_hand_phone.rotation
+	
+	# Store the original offset between sleeves and hands
+	left_sleeve_offset = left_sleeve.position - left_hand.position
+	right_sleeve_offset = right_sleeve.position - right_hand.position
 	
 	# Start with phone hands hidden below viewport
 	var viewport_height = get_viewport_rect().size.y
@@ -55,6 +69,12 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# Update flicker timer
+	flicker_timer += delta
+	if flicker_timer >= flicker_interval:
+		flicker_timer = 0.0
+		use_b_variant = not use_b_variant
+	
 	# Skip mouse control during phone transitions
 	if is_transitioning:
 		return
@@ -65,6 +85,8 @@ func _process(delta: float) -> void:
 	if is_on_phone:
 		left_hand_phone.position = left_hand_phone_original_pos
 		right_hand_phone.position = mouse_pos + POINTER_OFFSET
+		left_sleeve.visible = false
+		right_sleeve.visible = false
 		return
 	
 	# Regular hand controls
@@ -78,7 +100,7 @@ func _process(delta: float) -> void:
 		if last_controlled_side == "right" and not right_hand_returning:
 			# Transition: animate right hand back to original position
 			right_hand_returning = true
-			right_hand.texture = HAND_DOWN
+			right_hand.texture = HAND_DOWN_B if use_b_variant else HAND_DOWN
 			var return_tween = create_tween()
 			return_tween.set_trans(Tween.TRANS_SINE)
 			return_tween.set_ease(Tween.EASE_IN_OUT)
@@ -106,18 +128,18 @@ func _process(delta: float) -> void:
 			# Direct control
 			left_hand.position = mouse_pos
 		
-		# Check if hand is lifted above threshold
+		# Check if hand is lifted above threshold and apply flicker
 		if mouse_pos.y < hand_change_y_threshold:
-			left_hand.texture = HAND_UP
+			left_hand.texture = HAND_UP_B if use_b_variant else HAND_UP
 		else:
-			left_hand.texture = HAND_DOWN
+			left_hand.texture = HAND_DOWN_B if use_b_variant else HAND_DOWN
 	else:
 		# Right side - control right hand
 		active_hand = "Right"
 		if last_controlled_side == "left" and not left_hand_returning:
 			# Transition: animate left hand back to original position
 			left_hand_returning = true
-			left_hand.texture = HAND_DOWN
+			left_hand.texture = HAND_DOWN_B if use_b_variant else HAND_DOWN
 			var return_tween = create_tween()
 			return_tween.set_trans(Tween.TRANS_SINE)
 			return_tween.set_ease(Tween.EASE_IN_OUT)
@@ -145,11 +167,17 @@ func _process(delta: float) -> void:
 			# Direct control
 			right_hand.position = mouse_pos
 		
-		# Check if hand is lifted above threshold
+		# Check if hand is lifted above threshold and apply flicker
 		if mouse_pos.y < hand_change_y_threshold:
-			right_hand.texture = HAND_UP
+			right_hand.texture = HAND_UP_B if use_b_variant else HAND_UP
 		else:
-			right_hand.texture = HAND_DOWN
+			right_hand.texture = HAND_DOWN_B if use_b_variant else HAND_DOWN
+	
+	# Update sleeve positions to maintain constant distance to hands
+	left_sleeve.visible = true
+	right_sleeve.visible = true
+	left_sleeve.position = left_hand.position + left_sleeve_offset
+	right_sleeve.position = right_hand.position + right_sleeve_offset
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -255,9 +283,11 @@ func animate_to_phone_hands() -> void:
 	
 	await hands_down_tween.finished
 	
-	# Hide regular hands and show phone hands
+	# Hide regular hands and sleeves, show phone hands
 	left_hand.visible = false
 	right_hand.visible = false
+	left_sleeve.visible = false
+	right_sleeve.visible = false
 	left_hand_phone.visible = true
 	right_hand_phone.visible = true
 	
@@ -300,11 +330,13 @@ func animate_to_regular_hands() -> void:
 	
 	await phone_hands_down_tween.finished
 	
-	# Hide phone hands and show regular hands
+	# Hide phone hands and show regular hands and sleeves
 	left_hand_phone.visible = false
 	right_hand_phone.visible = false
 	left_hand.visible = true
 	right_hand.visible = true
+	left_sleeve.visible = true
+	right_sleeve.visible = true
 	
 	# Animate regular hands up into view
 	var hands_up_tween = create_tween()

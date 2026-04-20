@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://cvchsr2t4mir"]
+
+[ext_resource type="Script" uid="uid://dxylqpftrfpx8" path="res://Scripts/date.gd" id="1_sfm7o"]
+[ext_resource type="Texture2D" uid="uid://dqyla7ecv3kdn" path="res://Assets/Date/Date 1_happy.png" id="1_wnewm"]
+[ext_resource type="Texture2D" uid="uid://dwt8ycyd6kdxh" path="res://Assets/Date/Date 1_happy-export.png" id="2_3hh11"]
+[ext_resource type="Texture2D" uid="uid://o86ixvtghewk" path="res://Assets/Date/Date 1_angry.png" id="4_nvq0r"]
+[ext_resource type="Texture2D" uid="uid://dty7objb44kwc" path="res://Assets/Date/Date 1_angry-export.png" id="5_dprc1"]
+[ext_resource type="Texture2D" uid="uid://41ge3e8bihyl" path="res://Assets/Date/Date 1_confused.png" id="6_rksl0"]
+[ext_resource type="Texture2D" uid="uid://d21jujc5uf3ha" path="res://Assets/Date/Date 1_confused-export.png" id="7_lt7gs"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4xhkn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wnewm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_3hh11")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tn8qp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_nvq0r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_dprc1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2xh25"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_rksl0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_lt7gs")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[node name="Date" type="Node2D" unique_id=442524392]
+script = ExtResource("1_sfm7o")
+
+[node name="Happy" type="AnimatedSprite2D" parent="." unique_id=946328102]
+sprite_frames = SubResource("SpriteFrames_4xhkn")
+frame_progress = 0.5997087
+
+[node name="Angry" type="AnimatedSprite2D" parent="." unique_id=1183328290]
+visible = false
+position = Vector2(-398, -55)
+sprite_frames = SubResource("SpriteFrames_tn8qp")
+frame_progress = 0.44155496
+
+[node name="Confused" type="AnimatedSprite2D" parent="." unique_id=1685103032]
+visible = false
+position = Vector2(-104.00001, -48.999992)
+scale = Vector2(1.16, 1.16)
+sprite_frames = SubResource("SpriteFrames_2xh25")
+animation = &"new_animation"
+frame_progress = 0.5801227

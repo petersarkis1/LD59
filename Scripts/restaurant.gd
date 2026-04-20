@@ -1,6 +1,7 @@
 extends Node2D
 
 signal camera_view_changed(view_name: String)
+signal health_change(health: int)
 
 @onready var background: Sprite2D = $background
 @onready var camera: Camera2D = $Camera
@@ -13,12 +14,19 @@ var waiterSpawnPositions = {
 	"right": Vector2(720, -250)
 }
 
+var playerHealth: int = 5
+
+@onready var good: AudioStreamPlayer = $good
+@onready var bad: AudioStreamPlayer = $bad
+
+@onready var date: Node2D = $Date
 @onready var phone_timer: Timer = $PhoneTimer
-@onready var phone_ring: AudioStreamPlayer2D = $PhoneRing
-@onready var phone_buzz: AudioStreamPlayer2D = $PhoneBuzz
+@onready var phone_ring: AudioStreamPlayer = $PhoneRing
+@onready var phone_buzz: AudioStreamPlayer = $PhoneBuzz
+@onready var date_cough: AudioStreamPlayer = $dateCough
 
 @onready var date_timer: Timer = $DateTimer
-@onready var date_dialog: AudioStreamPlayer2D = $dateDialog
+@onready var date_dialog: AudioStreamPlayer = $dateDialog
 var date_cooldown_timeout: int = randi_range(10,20)
 
 var inital_phone_timeout: int = randi_range(15,25)
@@ -55,7 +63,18 @@ var camera_tween: Tween
 var background_tween: Tween
 var animation_duration: float = 0.5
 var is_nodding: bool = false
+
 var is_round_started: bool = false
+var is_date_waiting: bool = false
+var date_waiting_duration: float = 0.0
+var date_warning_time: float = 4.0
+var date_warned: bool = false
+var date_damage_time: float = 6.0
+var is_phone_waiting: bool = false
+var phone_waiting_duration: float = 0.0
+var phone_warning_time: float = 6.0
+var phone_warned: bool = false
+var phone_damage_time: float = 10.0
 
 func _ready() -> void:
 	date_dialog.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
@@ -64,9 +83,12 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	handle_camera_input()
+	handle_date_event(delta)
+	handle_phone_event(delta)
 	
 func startRound() -> void:
 	date_dialog.play()
+	date.is_talking = true
 	add_child(spawn_timer)
 	spawn_timer.wait_time = spawn_interval
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
@@ -76,6 +98,48 @@ func startRound() -> void:
 	date_timer.start(date_cooldown_timeout)
 	#phone timer
 	phone_timer.start(inital_phone_timeout)
+
+func handle_date_event(delta) -> void:
+	if is_date_waiting:
+		date_waiting_duration += delta
+		if is_nodding:
+			is_date_waiting = false
+			date_warned = false
+			await get_tree().create_timer(1.0).timeout
+			date_dialog.play()
+			date.is_talking = true
+			date_timer.start(date_cooldown_timeout)
+		else:
+			if date_waiting_duration > date_warning_time and not date_warned:
+				date_cough.play()
+				date_warned = true
+			if date_waiting_duration > date_damage_time:
+				lose_health()
+				is_date_waiting = false
+				date_warned = false
+				await get_tree().create_timer(1.0).timeout
+				date_dialog.play()
+				date.is_talking = true
+				date_timer.start(date_cooldown_timeout)
+	
+func handle_phone_event(delta) -> void:
+	if is_phone_waiting:
+		phone_waiting_duration += delta
+		if phone_waiting_duration > phone_warning_time and not phone_warned:
+			phone_ring.volume_db += 2.0
+			phone_buzz.volume_db += 5.0
+			phone_warned = true
+		if phone_waiting_duration > phone_damage_time:
+			lose_health()
+			phone_waiting_duration = 0
+
+func lose_health() -> void:
+	bad.play()
+	health_change.emit(playerHealth)
+	playerHealth -= 1
+	if playerHealth <= 0:
+		pass
+		
 
 func handle_camera_input() -> void:
 	if Input.is_action_just_pressed("ui_left"):
@@ -122,7 +186,7 @@ func play_nodding_animation() -> void:
 	if background_tween:
 		background_tween.kill()
 	
-	var original_position = background.position
+	var original_position = camera.position
 	var nod_distance = 20.0
 	var nod_duration = 0.2
 	
@@ -131,10 +195,10 @@ func play_nodding_animation() -> void:
 	background_tween.set_trans(Tween.TRANS_SINE)
 	
 	for i in range(3):
-		background_tween.tween_property(background, "position:y", original_position.y - nod_distance, nod_duration)
-		background_tween.tween_property(background, "position:y", original_position.y + nod_distance, nod_duration)
+		background_tween.tween_property(camera, "position:y", original_position.y - nod_distance, nod_duration)
+		background_tween.tween_property(camera, "position:y", original_position.y + nod_distance, nod_duration)
 	
-	background_tween.tween_property(background, "position", original_position, nod_duration)
+	background_tween.tween_property(camera, "position", original_position, nod_duration)
 	background_tween.finished.connect(func(): is_nodding = false)
 
 func _on_spawn_timer_timeout() -> void:
@@ -191,7 +255,7 @@ func _on_player_hand_signaled(side: String) -> void:
 
 
 func _on_phone_start_timer_timeout() -> void:
-	var phone = get_tree().root.get_node("Restaurant/Camera/Player/LeftHand_Phone/Phone")
+	var phone = get_tree().root.get_node("Game/CRT-Container/CRT/World-Container/World/Restaurant/Camera/Player/Left/LeftHand_Phone/Phone")
 	phone.finished.connect(_on_phone_finished)
 	phone.start()
 	
@@ -199,8 +263,16 @@ func _on_phone_start_timer_timeout() -> void:
 	phone_ring.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	phone_buzz.play()
 	phone_buzz.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	is_phone_waiting = true
+	phone_waiting_duration = 0
 
 func _on_phone_finished() -> void:
+	is_phone_waiting = false
+	if phone_warned:
+		phone_ring.volume_db -= 2.0
+		phone_buzz.volume_db -= 5.0
+	phone_warned = false
+	phone_waiting_duration = 0
 	phone_timer.start(phone_cooldown_timeout)
 	phone_ring.stop()
 	phone_buzz.stop()
@@ -208,3 +280,6 @@ func _on_phone_finished() -> void:
 
 func _on_date_start_timer_timeout() -> void:
 	date_dialog.stop()
+	date.is_talking = false
+	is_date_waiting = true
+	date_waiting_duration = 0

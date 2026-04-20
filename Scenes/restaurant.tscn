@@ -5,7 +5,11 @@
 [ext_resource type="PackedScene" uid="uid://n2cxf8pnky0s" path="res://Scenes/player.tscn" id="2_cradt"]
 [ext_resource type="AudioStream" uid="uid://gtfgisc5mveg" path="res://Assets/Audio/phone ring.wav" id="4_2u40p"]
 [ext_resource type="AudioStream" uid="uid://dbaclhqh4pag" path="res://Assets/Audio/buzz.wav" id="5_7g0bs"]
+[ext_resource type="PackedScene" uid="uid://cvchsr2t4mir" path="res://Scenes/date.tscn" id="5_uq202"]
 [ext_resource type="AudioStream" uid="uid://bh4e0t0aut25s" path="res://Assets/Audio/yapping.wav" id="6_7g0bs"]
+[ext_resource type="AudioStream" uid="uid://c84r7bd1ufrov" path="res://Assets/Audio/woman-cough.mp3" id="7_xwk5a"]
+[ext_resource type="AudioStream" uid="uid://ducbkcgvuq8f1" path="res://Assets/Audio/good.wav" id="8_uq202"]
+[ext_resource type="AudioStream" uid="uid://dki8tw0dbbifq" path="res://Assets/Audio/bad.wav" id="9_t8yb2"]
 
 [node name="Restaurant" type="Node2D" unique_id=1584030647]
 script = ExtResource("1_801p6")
@@ -27,19 +31,39 @@ one_shot = true
 [node name="DateTimer" type="Timer" parent="." unique_id=1563596530]
 one_shot = true
 
-[node name="PhoneRing" type="AudioStreamPlayer2D" parent="." unique_id=217438622]
+[node name="PhoneRing" type="AudioStreamPlayer" parent="." unique_id=677507718]
 stream = ExtResource("4_2u40p")
 volume_db = -16.361
 
-[node name="PhoneBuzz" type="AudioStreamPlayer2D" parent="." unique_id=759106381]
+[node name="PhoneBuzz" type="AudioStreamPlayer" parent="." unique_id=326246011]
 stream = ExtResource("5_7g0bs")
 
-[node name="dateDialog" type="AudioStreamPlayer2D" parent="." unique_id=1744402183]
+[node name="dateDialog" type="AudioStreamPlayer" parent="." unique_id=685939379]
 stream = ExtResource("6_7g0bs")
 volume_db = -13.944
 pitch_scale = 0.75
 
+[node name="dateCough" type="AudioStreamPlayer" parent="." unique_id=1551473000]
+stream = ExtResource("7_xwk5a")
+volume_db = -13.944
+pitch_scale = 0.75
+
+[node name="good" type="AudioStreamPlayer" parent="." unique_id=847163048]
+stream = ExtResource("8_uq202")
+volume_db = -13.944
+pitch_scale = 0.75
+
+[node name="bad" type="AudioStreamPlayer" parent="." unique_id=1498947770]
+stream = ExtResource("9_t8yb2")
+volume_db = -13.944
+pitch_scale = 0.75
+
+[node name="Date" parent="." unique_id=442524392 instance=ExtResource("5_uq202")]
+position = Vector2(-22.999998, -162.99998)
+scale = Vector2(0.2, 0.2)
+
 [connection signal="camera_view_changed" from="." to="Camera/Player" method="_on_restaurant_camera_view_changed"]
+[connection signal="health_change" from="." to="Date" method="_on_player_health_change"]
 [connection signal="hand_signaled" from="Camera/Player" to="." method="_on_player_hand_signaled"]
 [connection signal="timeout" from="PhoneTimer" to="." method="_on_phone_start_timer_timeout"]
 [connection signal="timeout" from="DateTimer" to="." method="_on_date_start_timer_timeout"]

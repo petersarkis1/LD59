@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://ci6ikbdpp3gci" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Material" uid="uid://b3arj3f2ewvyi" path="res://Materials/pixel_material.tres" id="2_fkybt"]
-[ext_resource type="Texture2D" uid="uid://b56cy0xmcuvkf" path="res://Assets/Player/RestingHands/hand_rest_slideR.png" id="3_fkybt"]
+[ext_resource type="Texture2D" uid="uid://cnbvxh2pclful" path="res://Assets/Player/RestingHands/HAND_DOWN_A.png" id="3_3smsa"]
+[ext_resource type="Texture2D" uid="uid://cfhhfo5kemm06" path="res://Assets/Player/Sleeves/sleeve_extended_1.png" id="4_3smsa"]
 [ext_resource type="Texture2D" uid="uid://5k11fceiee5i" path="res://Assets/Player/PhoneHand/busted phone transperency.png" id="4_x3wgy"]
 [ext_resource type="Script" uid="uid://dvgyntx220xme" path="res://Scripts/phone/phone.gd" id="5_x3wgy"]
 [ext_resource type="Texture2D" uid="uid://scbg0aodwcy1" path="res://Assets/Player/PhoneHand/phone_point-export.png" id="6_x3wgy"]
@@ -10,27 +11,31 @@
 [node name="Player" type="Node2D" unique_id=1459030903]
 script = ExtResource("1_cvnsp")
 
-[node name="LeftHand" type="Sprite2D" parent="." unique_id=1343521988]
-material = ExtResource("2_fkybt")
-position = Vector2(270, 744)
-scale = Vector2(-0.15, 0.15)
-texture = ExtResource("3_fkybt")
+[node name="Left" type="Node2D" parent="." unique_id=690876039]
 
-[node name="RightHand" type="Sprite2D" parent="." unique_id=398723153]
+[node name="LeftHand" type="Sprite2D" parent="Left" unique_id=1343521988]
 material = ExtResource("2_fkybt")
-position = Vector2(769.00006, 752)
-scale = Vector2(0.15, 0.15)
-texture = ExtResource("3_fkybt")
+position = Vector2(267, 644)
+rotation = 3.1415927
+scale = Vector2(0.14, -0.14)
+texture = ExtResource("3_3smsa")
 
-[node name="LeftHand_Phone" type="Sprite2D" parent="." unique_id=45090948]
+[node name="LeftSleeve" type="Sprite2D" parent="Left" unique_id=963507196]
+material = ExtResource("2_fkybt")
+position = Vector2(1, 1080)
+rotation = 3.1415927
+scale = Vector2(0.196, -0.196)
+texture = ExtResource("4_3smsa")
+
+[node name="LeftHand_Phone" type="Sprite2D" parent="Left" unique_id=45090948]
 visible = false
 material = ExtResource("2_fkybt")
 position = Vector2(405.99997, 442.99997)
-rotation = -0.6981317
-scale = Vector2(-0.16, 0.16)
+rotation = 2.443461
+scale = Vector2(0.16, -0.16)
 texture = ExtResource("4_x3wgy")
 
-[node name="Phone" type="Node2D" parent="LeftHand_Phone" unique_id=1224081279]
+[node name="Phone" type="Node2D" parent="Left/LeftHand_Phone" unique_id=1224081279]
 z_index = -1
 position = Vector2(-136.43478, -823.7789)
 rotation = -0.20943952
@@ -38,7 +43,21 @@ scale = Vector2(-2.06, 2.06)
 script = ExtResource("5_x3wgy")
 phone_size = Vector2(338, 750)
 
-[node name="RightHand_Phone" type="Sprite2D" parent="." unique_id=1705802193]
+[node name="Right" type="Node2D" parent="." unique_id=1633879245]
+
+[node name="RightHand" type="Sprite2D" parent="Right" unique_id=398723153]
+material = ExtResource("2_fkybt")
+position = Vector2(769, 639)
+scale = Vector2(0.14, 0.14)
+texture = ExtResource("3_3smsa")
+
+[node name="RightSleeve" type="Sprite2D" parent="Right" unique_id=942578381]
+material = ExtResource("2_fkybt")
+position = Vector2(1040, 1081)
+scale = Vector2(0.196, 0.196)
+texture = ExtResource("4_3smsa")
+
+[node name="RightHand_Phone" type="Sprite2D" parent="Right" unique_id=1705802193]
 visible = false
 material = ExtResource("2_fkybt")
 position = Vector2(874, 654)

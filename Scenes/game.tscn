@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://ckvlyjdh4lxoo"]
+
+[ext_resource type="PackedScene" uid="uid://ben14fulhk538" path="res://Scenes/restaurant.tscn" id="1_ebmjs"]
+[ext_resource type="Texture2D" uid="uid://d0xk2tsaqjovo" path="res://Assets/UI/hud.png" id="1_qxrlw"]
+[ext_resource type="Shader" uid="uid://b6qn5w2q0lqa2" path="res://Shaders/CRT.gdshader" id="1_wrm1d"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wrm1d"]
+shader = ExtResource("1_wrm1d")
+shader_parameter/curvature = 0.0400000019
+shader_parameter/scanline_intensity = 0.25200001197
+shader_parameter/vignette_strength = 0.2790000132525
+shader_parameter/rgb_offset = 0.00400000019
+shader_parameter/flicker_speed = 2.0
+
+[node name="Game" type="Node2D" unique_id=1182577005]
+
+[node name="CRT-Container" type="SubViewportContainer" parent="." unique_id=1909257687]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CRT" type="SubViewport" parent="CRT-Container" unique_id=749258645]
+handle_input_locally = false
+size = Vector2i(1392, 870)
+render_target_update_mode = 4
+
+[node name="World-Container" type="SubViewportContainer" parent="CRT-Container/CRT" unique_id=103493432]
+material = SubResource("ShaderMaterial_wrm1d")
+offset_left = 336.0
+offset_top = 56.0
+offset_right = 1739.0
+offset_bottom = 1209.0
+
+[node name="World" type="SubViewport" parent="CRT-Container/CRT/World-Container" unique_id=1203988402]
+handle_input_locally = false
+size = Vector2i(1024, 768)
+render_target_update_mode = 4
+
+[node name="Restaurant" parent="CRT-Container/CRT/World-Container/World" unique_id=1584030647 instance=ExtResource("1_ebmjs")]
+
+[node name="HUD" type="Sprite2D" parent="CRT-Container/CRT/World-Container" unique_id=169299619]
+position = Vector2(360, 376)
+texture = ExtResource("1_qxrlw")

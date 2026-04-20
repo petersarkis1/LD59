@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://dgu88nyqrm5mt"]
+
+[ext_resource type="Script" uid="uid://dixra5j1jr6al" path="res://Scripts/guide.gd" id="1_fgo0i"]
+[ext_resource type="Texture2D" uid="uid://m10hyjrqnrsl" path="res://Assets/Friend/Date 2_confused.png" id="2_pu8j0"]
+[ext_resource type="Texture2D" uid="uid://by7qv8ccncgb5" path="res://Assets/Friend/Date 2_happy.png" id="3_accjd"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3j6fc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_pu8j0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_accjd")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="guide" type="Node2D" unique_id=268438558]
+script = ExtResource("1_fgo0i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2100106520]
+sprite_frames = SubResource("SpriteFrames_3j6fc")
+frame_progress = 0.8912485

@@ -12,7 +12,7 @@ const CELL_GAP      = 0.0
 const STRIP_H       = 280.0
 const SCROLL_DURATION = 9.0
 const RESULT_PAUSE    = 0.6
-const RESULT_DISPLAY_TIME = 5.0
+const RESULT_DISPLAY_TIME = 1.2
 const EDGE_PAD      = 20.0
 
 # ── Exact CS:GO Scaleform rarity palette ──────────────────────────────────────

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dgu88nyqrm5mt"]
 
 [ext_resource type="Script" uid="uid://dixra5j1jr6al" path="res://Scripts/guide.gd" id="1_fgo0i"]
+[ext_resource type="Material" uid="uid://b3arj3f2ewvyi" path="res://Materials/pixel_material.tres" id="2_accjd"]
 [ext_resource type="Texture2D" uid="uid://m10hyjrqnrsl" path="res://Assets/Friend/Date 2_confused.png" id="2_pu8j0"]
 [ext_resource type="Texture2D" uid="uid://by7qv8ccncgb5" path="res://Assets/Friend/Date 2_happy.png" id="3_accjd"]
 
@@ -22,5 +23,7 @@ animations = [{
 script = ExtResource("1_fgo0i")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2100106520]
+material = ExtResource("2_accjd")
+scale = Vector2(0.1, 0.1)
 sprite_frames = SubResource("SpriteFrames_3j6fc")
 frame_progress = 0.8912485

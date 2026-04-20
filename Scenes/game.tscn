@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://ben14fulhk538" path="res://Scenes/restaurant.tscn" id="1_ebmjs"]
 [ext_resource type="Texture2D" uid="uid://d0xk2tsaqjovo" path="res://Assets/UI/hud.png" id="1_qxrlw"]
 [ext_resource type="Shader" uid="uid://b6qn5w2q0lqa2" path="res://Shaders/CRT.gdshader" id="1_wrm1d"]
+[ext_resource type="PackedScene" uid="uid://dgu88nyqrm5mt" path="res://Scenes/guide.tscn" id="4_3dryh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wrm1d"]
 shader = ExtResource("1_wrm1d")
@@ -40,3 +41,6 @@ render_target_update_mode = 4
 [node name="HUD" type="Sprite2D" parent="CRT-Container/CRT/World-Container" unique_id=169299619]
 position = Vector2(360, 376)
 texture = ExtResource("1_qxrlw")
+
+[node name="guide" parent="." unique_id=268438558 instance=ExtResource("4_3dryh")]
+position = Vector2(136, 640)

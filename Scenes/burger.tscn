@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://lkjn2tnl0ayf"]
 
+[ext_resource type="Script" uid="uid://6jx4wivgyqx7" path="res://Scripts/burger.gd" id="1_je8qv"]
 [ext_resource type="Texture2D" uid="uid://dl82tn64ntpwo" path="res://Assets/food/burger.png" id="1_ys118"]
 
 [node name="Burger" type="Node2D" unique_id=976259433]
+script = ExtResource("1_je8qv")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2093888452]
 scale = Vector2(0.2, 0.2)

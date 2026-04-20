@@ -66,7 +66,7 @@ var is_nodding: bool = false
 var is_round_started: bool = false
 var is_date_waiting: bool = false
 var date_waiting_duration: float = 0.0
-var date_warning_time: float = 4.0
+var date_warning_time: float = 2.0
 var date_warned: bool = false
 var date_damage_time: float = 6.0
 var is_phone_waiting: bool = false
@@ -114,6 +114,7 @@ func handle_date_event(delta) -> void:
 				date_warned = true
 			if date_waiting_duration > date_damage_time:
 				lose_health()
+				print("missed date question")
 				is_date_waiting = false
 				date_warned = false
 				await get_tree().create_timer(1.0).timeout
@@ -130,11 +131,12 @@ func handle_phone_event(delta) -> void:
 			phone_warned = true
 		if phone_waiting_duration > phone_damage_time:
 			lose_health()
+			print("missed phone alarm")
 			phone_waiting_duration = 0
 
 func lose_health() -> void:
 	bad.play()
-	Globals.player_health -= 1
+	Globals.player_health += 1
 	health_change.emit(Globals.player_health)
 	if Globals.player_health <= 0:
 		pass
@@ -236,8 +238,10 @@ func spawn_waiter() -> void:
 	add_child(waiter)
 	door.play()
 
-func _on_waiter_despawned(lane: String) -> void:
-	lose_health()
+func _on_waiter_despawned(lane: String, missed: bool) -> void:
+	if missed:
+		lose_health()
+		print("missed waiter")
 	if lane == "left":
 		is_left_lane_occupied = false
 		current_left_waiter = null

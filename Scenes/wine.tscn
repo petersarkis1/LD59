@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://4eg1nk8vdqp0"]
 
 [ext_resource type="Texture2D" uid="uid://cfpi8pwmmy27d" path="res://Assets/food/wine.png" id="1_h108a"]
+[ext_resource type="Script" uid="uid://cjv253h836ffr" path="res://Scripts/wine.gd" id="2_74mcr"]
 
 [node name="wine" type="Node2D" unique_id=1637878203]
+script = ExtResource("2_74mcr")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=816925646]
 scale = Vector2(0.13, 0.13)

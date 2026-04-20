@@ -89,13 +89,13 @@ func pause_and_look_left_and_right_waiting_for_signal() -> void:
 			return
 	
 	if not is_signaled:
-		_on_despawn_timer_timeout()
+		_on_despawn_timer_timeout(true)
 
 	# Finished all 3 looks without being signaled — walk away and despawn
 	var dir: float = sign(position.x) if position.x != 0.0 else 1.0
 	position.x += dir * 100.0
 	queue_free()
 
-func _on_despawn_timer_timeout() -> void:
-	waiter_despawned.emit(lane)
+func _on_despawn_timer_timeout(missed:bool = false) -> void:
+	waiter_despawned.emit(lane, missed)
 	queue_free()

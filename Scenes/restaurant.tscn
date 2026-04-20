@@ -47,7 +47,7 @@ pitch_scale = 0.75
 
 [node name="dateCough" type="AudioStreamPlayer" parent="." unique_id=1551473000]
 stream = ExtResource("7_xwk5a")
-volume_db = -13.944
+volume_db = -1.743
 pitch_scale = 0.75
 
 [node name="good" type="AudioStreamPlayer" parent="." unique_id=847163048]

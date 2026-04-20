@@ -10,8 +10,8 @@ var camera_pos: String = "center"
 const WAITER = preload("res://Scenes/waiter.tscn")
 
 var waiterSpawnPositions = {
-	"left": Vector2(-720, -250),
-	"right": Vector2(720, -250)
+	"left": Vector2(-750, 100),
+	"right": Vector2(750, 100)
 }
 
 @onready var good: AudioStreamPlayer = $good

@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://ben14fulhk538"]
 
 [ext_resource type="Script" uid="uid://b16xeevmuowf0" path="res://Scripts/restaurant.gd" id="1_801p6"]
-[ext_resource type="Texture2D" uid="uid://bld2wa15ivcwx" path="res://Assets/Restaurant/restaurant.png" id="1_yiosm"]
 [ext_resource type="PackedScene" uid="uid://n2cxf8pnky0s" path="res://Scenes/player.tscn" id="2_cradt"]
+[ext_resource type="Texture2D" uid="uid://beya5yhvvwjy" path="res://Assets/Restaurant/Dinner background.jpeg" id="2_uc4sk"]
+[ext_resource type="Texture2D" uid="uid://d1v6att43v7wt" path="res://Assets/Restaurant/table cloth.png" id="3_3n0a0"]
 [ext_resource type="AudioStream" uid="uid://gtfgisc5mveg" path="res://Assets/Audio/phone ring.wav" id="4_2u40p"]
+[ext_resource type="Texture2D" uid="uid://c06wnydf16nyo" path="res://Assets/Restaurant/kitchen door closed.png" id="4_3n0a0"]
 [ext_resource type="AudioStream" uid="uid://dbaclhqh4pag" path="res://Assets/Audio/buzz.wav" id="5_7g0bs"]
 [ext_resource type="PackedScene" uid="uid://cvchsr2t4mir" path="res://Scenes/date.tscn" id="5_uq202"]
 [ext_resource type="AudioStream" uid="uid://bh4e0t0aut25s" path="res://Assets/Audio/yapping.wav" id="6_7g0bs"]
@@ -18,8 +20,26 @@ script = ExtResource("1_801p6")
 
 [node name="background" type="Sprite2D" parent="." unique_id=819722459]
 z_index = -4096
-position = Vector2(0, 192)
-texture = ExtResource("1_yiosm")
+position = Vector2(0, -88.999985)
+scale = Vector2(1.66, 1.66)
+texture = ExtResource("2_uc4sk")
+
+[node name="tablecloth" type="Sprite2D" parent="." unique_id=340654104]
+position = Vector2(-15, 460.99997)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("3_3n0a0")
+
+[node name="doorA" type="Sprite2D" parent="." unique_id=198995494]
+z_index = -4090
+position = Vector2(-750, 60)
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("4_3n0a0")
+
+[node name="doorA2" type="Sprite2D" parent="." unique_id=1844533696]
+z_index = -4090
+position = Vector2(750, 60)
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("4_3n0a0")
 
 [node name="Camera" type="Camera2D" parent="." unique_id=1241887472]
 z_index = 4096
@@ -66,8 +86,8 @@ stream = ExtResource("10_t8yb2")
 pitch_scale = 0.75
 
 [node name="Date" parent="." unique_id=442524392 instance=ExtResource("5_uq202")]
-position = Vector2(-22.999998, -162.99998)
-scale = Vector2(0.2, 0.2)
+position = Vector2(-16, -33.000008)
+scale = Vector2(0.175, 0.175)
 
 [node name="ambiance" type="AudioStreamPlayer" parent="." unique_id=1030677733]
 stream = ExtResource("12_iq7pb")

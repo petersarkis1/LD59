@@ -14,10 +14,10 @@ var foods = [WINE, BURGER]
 var selectedFood
 var initial_scale: float = 0.25
 var final_scale: float = 3.0
-var min_y: float = -250.0
+var min_y: float = 100.0
 var max_y: float = 250.0
 var target_y: float = 250.0
-var look_y: float = -200.0
+var look_y: float = 150.0
 var is_looking: bool = false
 var is_flipped: bool = false
 var is_at_table: bool = false

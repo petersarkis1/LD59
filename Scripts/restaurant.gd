@@ -14,8 +14,6 @@ var waiterSpawnPositions = {
 	"right": Vector2(720, -250)
 }
 
-var playerHealth: int = 5
-
 @onready var good: AudioStreamPlayer = $good
 @onready var bad: AudioStreamPlayer = $bad
 
@@ -135,9 +133,9 @@ func handle_phone_event(delta) -> void:
 
 func lose_health() -> void:
 	bad.play()
-	health_change.emit(playerHealth)
-	playerHealth -= 1
-	if playerHealth <= 0:
+	Globals.player_health -= 1
+	health_change.emit(Globals.player_health)
+	if Globals.player_health <= 0:
 		pass
 		
 

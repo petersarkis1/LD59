@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://ckvlyjdh4lxoo"]
 
 [ext_resource type="PackedScene" uid="uid://ben14fulhk538" path="res://Scenes/restaurant.tscn" id="1_ebmjs"]
-[ext_resource type="Texture2D" uid="uid://d0xk2tsaqjovo" path="res://Assets/UI/hud.png" id="1_qxrlw"]
 [ext_resource type="Shader" uid="uid://b6qn5w2q0lqa2" path="res://Shaders/CRT.gdshader" id="1_wrm1d"]
+[ext_resource type="Texture2D" uid="uid://ckb60d3a78p6k" path="res://Assets/UI/hud w cutouts.png" id="3_1l0tm"]
 [ext_resource type="PackedScene" uid="uid://dgu88nyqrm5mt" path="res://Scenes/guide.tscn" id="4_3dryh"]
 [ext_resource type="PackedScene" uid="uid://d41kqq01evx6" path="res://Scenes/health.tscn" id="5_wowpa"]
 [ext_resource type="AudioStream" uid="uid://pftm1xqhjtqo" path="res://Assets/Audio/soundtrack.wav" id="6_i6g32"]
@@ -44,7 +44,7 @@ render_target_update_mode = 4
 
 [node name="HUD" type="Sprite2D" parent="CRT-Container/CRT/World-Container" unique_id=169299619]
 position = Vector2(360, 376)
-texture = ExtResource("1_qxrlw")
+texture = ExtResource("3_1l0tm")
 
 [node name="guide" parent="CRT-Container/CRT" unique_id=268438558 instance=ExtResource("4_3dryh")]
 position = Vector2(136, 640)

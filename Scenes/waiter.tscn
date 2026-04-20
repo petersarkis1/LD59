@@ -6,7 +6,6 @@
 [ext_resource type="Texture2D" uid="uid://c6i4cpkscey3b" path="res://Assets/Waiter/waiterWalk2.png" id="3_k76bp"]
 [ext_resource type="Texture2D" uid="uid://c1aeifwvihbh5" path="res://Assets/Waiter/waiter_pose.png" id="5_k76bp"]
 [ext_resource type="AudioStream" uid="uid://c1p0loyfb66u6" path="res://Assets/Audio/footsteps.wav" id="6_l8app"]
-[ext_resource type="PackedScene" uid="uid://lkjn2tnl0ayf" path="res://Scenes/burger.tscn" id="7_nbisv"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_l8app"]
 animations = [{
@@ -47,7 +46,5 @@ texture = ExtResource("5_k76bp")
 stream = ExtResource("6_l8app")
 volume_db = -24.717
 
-[node name="Food" type="Node2D" parent="." unique_id=1979840733]
+[node name="FoodPos" type="Node2D" parent="." unique_id=1979840733]
 position = Vector2(64, -144)
-
-[node name="Burger" parent="Food" unique_id=976259433 instance=ExtResource("7_nbisv")]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ckvlyjdh4lxoo"]
 
-[ext_resource type="PackedScene" uid="uid://ben14fulhk538" path="res://Scenes/restaurant.tscn" id="1_ebmjs"]
+[ext_resource type="Script" uid="uid://b732l6nl4tjws" path="res://Scripts/game.gd" id="1_v158k"]
 [ext_resource type="Shader" uid="uid://b6qn5w2q0lqa2" path="res://Shaders/CRT.gdshader" id="1_wrm1d"]
 [ext_resource type="Texture2D" uid="uid://ckb60d3a78p6k" path="res://Assets/UI/hud w cutouts.png" id="3_1l0tm"]
 [ext_resource type="PackedScene" uid="uid://dgu88nyqrm5mt" path="res://Scenes/guide.tscn" id="4_3dryh"]
@@ -18,6 +18,7 @@ shader_parameter/flicker_speed = 2.0
 
 [node name="Game" type="Node2D" unique_id=1182577005]
 position = Vector2(0, 127)
+script = ExtResource("1_v158k")
 
 [node name="CRT-Container" type="SubViewportContainer" parent="." unique_id=1909257687]
 material = SubResource("ShaderMaterial_wowpa")
@@ -40,10 +41,8 @@ handle_input_locally = false
 size = Vector2i(1024, 768)
 render_target_update_mode = 4
 
-[node name="Restaurant" parent="CRT-Container/CRT/World-Container/World" unique_id=1584030647 instance=ExtResource("1_ebmjs")]
-
 [node name="HUD" type="Sprite2D" parent="CRT-Container/CRT/World-Container" unique_id=169299619]
-position = Vector2(360, 376)
+position = Vector2(360, 377)
 texture = ExtResource("3_1l0tm")
 
 [node name="guide" parent="CRT-Container/CRT" unique_id=268438558 instance=ExtResource("4_3dryh")]

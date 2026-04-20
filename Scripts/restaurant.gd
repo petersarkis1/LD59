@@ -74,7 +74,6 @@ var phone_waiting_duration: float = 0.0
 var phone_warning_time: float = 6.0
 var phone_warned: bool = false
 var phone_damage_time: float = 15.0
-var level_length: float = 60.0
 
 func _ready() -> void:
 	date_dialog.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
@@ -87,6 +86,7 @@ func _process(delta: float) -> void:
 	handle_phone_event(delta)
 	
 func startRound() -> void:
+	Globals.tutorial_complete = true
 	date_dialog.play()
 	ambiance.play()
 	date.is_talking = true

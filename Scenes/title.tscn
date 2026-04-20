@@ -1,23 +1,20 @@
 [gd_scene format=3 uid="uid://bmyab3enhp8c8"]
 
 [ext_resource type="Script" uid="uid://bulu458tqwyaw" path="res://Scripts/title.gd" id="1_q2qps"]
-[ext_resource type="Texture2D" uid="uid://do2iamthsh0rd" path="res://Assets/title/title.png" id="1_w31pl"]
 [ext_resource type="Texture2D" uid="uid://b4smkm0q2qnlq" path="res://Assets/title/start.png" id="2_fp2oq"]
-[ext_resource type="Texture2D" uid="uid://bcfap2jdkntwb" path="res://Assets/title/title text.png" id="3_q2qps"]
+[ext_resource type="Texture2D" uid="uid://gvgo6hkr1hll" path="res://Assets/UI/title_START.png" id="2_q2qps"]
 
 [node name="title" type="Node2D" unique_id=705920851]
+scale = Vector2(0.265, 0.265)
 script = ExtResource("1_q2qps")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038641381]
-position = Vector2(720, 552)
-texture = ExtResource("1_w31pl")
+position = Vector2(2626.415, 2113.2075)
+scale = Vector2(0.92, 0.92)
+texture = ExtResource("2_q2qps")
 
 [node name="startBtn" type="Sprite2D" parent="." unique_id=988996819]
-position = Vector2(720, 536)
-scale = Vector2(0.41, 0.41)
+visible = false
+position = Vector2(2626.4148, 3290.566)
+scale = Vector2(1.875, 0.727)
 texture = ExtResource("2_fp2oq")
-
-[node name="titleText" type="Sprite2D" parent="." unique_id=234090814]
-position = Vector2(688, 111.99997)
-scale = Vector2(1.94, 1.94)
-texture = ExtResource("3_q2qps")

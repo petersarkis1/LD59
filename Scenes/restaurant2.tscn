@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://dlxjndtexfn7w"]
+
+[ext_resource type="Script" uid="uid://b16xeevmuowf0" path="res://Scripts/restaurant.gd" id="1_3gd53"]
+[ext_resource type="Texture2D" uid="uid://beya5yhvvwjy" path="res://Assets/Restaurant/Dinner background.jpeg" id="2_tuqso"]
+[ext_resource type="Texture2D" uid="uid://d1v6att43v7wt" path="res://Assets/Restaurant/table cloth.png" id="3_70d8y"]
+[ext_resource type="Texture2D" uid="uid://c06wnydf16nyo" path="res://Assets/Restaurant/kitchen door closed.png" id="4_i7ll8"]
+[ext_resource type="PackedScene" uid="uid://n2cxf8pnky0s" path="res://Scenes/player.tscn" id="5_nnspp"]
+[ext_resource type="AudioStream" uid="uid://gtfgisc5mveg" path="res://Assets/Audio/phone ring.wav" id="6_toc6c"]
+[ext_resource type="AudioStream" uid="uid://dbaclhqh4pag" path="res://Assets/Audio/buzz.wav" id="7_yb53s"]
+[ext_resource type="AudioStream" uid="uid://bh4e0t0aut25s" path="res://Assets/Audio/yapping.wav" id="8_uhx77"]
+[ext_resource type="AudioStream" uid="uid://c84r7bd1ufrov" path="res://Assets/Audio/woman-cough.mp3" id="9_hu34y"]
+[ext_resource type="AudioStream" uid="uid://ducbkcgvuq8f1" path="res://Assets/Audio/good.wav" id="10_07vi2"]
+[ext_resource type="AudioStream" uid="uid://dki8tw0dbbifq" path="res://Assets/Audio/bad.wav" id="11_y1fbg"]
+[ext_resource type="AudioStream" uid="uid://t74j1yvu0ajy" path="res://Assets/Audio/door.wav" id="12_trksq"]
+[ext_resource type="PackedScene" uid="uid://dkcitmlyuepll" path="res://Scenes/date2.tscn" id="14_3gd53"]
+[ext_resource type="AudioStream" uid="uid://b1k336ccphabn" path="res://Assets/Audio/ambiance.wav" id="14_kw5i4"]
+
+[node name="Restaurant" type="Node2D" unique_id=1584030647]
+script = ExtResource("1_3gd53")
+
+[node name="background" type="Sprite2D" parent="." unique_id=819722459]
+z_index = -4096
+position = Vector2(0, -88.999985)
+scale = Vector2(1.66, 1.66)
+texture = ExtResource("2_tuqso")
+
+[node name="tablecloth" type="Sprite2D" parent="." unique_id=340654104]
+position = Vector2(-15, 460.99997)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("3_70d8y")
+
+[node name="doorA" type="Sprite2D" parent="." unique_id=198995494]
+z_index = -4090
+position = Vector2(-750, 60)
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("4_i7ll8")
+
+[node name="doorA2" type="Sprite2D" parent="." unique_id=1844533696]
+z_index = -4090
+position = Vector2(750, 60)
+scale = Vector2(0.28, 0.28)
+texture = ExtResource("4_i7ll8")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1241887472]
+z_index = 4096
+
+[node name="Player" parent="Camera" unique_id=1459030903 instance=ExtResource("5_nnspp")]
+position = Vector2(-512, -384)
+
+[node name="PhoneTimer" type="Timer" parent="." unique_id=2125315911]
+one_shot = true
+
+[node name="DateTimer" type="Timer" parent="." unique_id=1563596530]
+one_shot = true
+
+[node name="PhoneRing" type="AudioStreamPlayer" parent="." unique_id=677507718]
+stream = ExtResource("6_toc6c")
+volume_db = -4.16
+
+[node name="PhoneBuzz" type="AudioStreamPlayer" parent="." unique_id=326246011]
+stream = ExtResource("7_yb53s")
+volume_db = 3.486
+
+[node name="dateDialog" type="AudioStreamPlayer" parent="." unique_id=685939379]
+stream = ExtResource("8_uhx77")
+volume_db = -20.335
+pitch_scale = 0.21
+
+[node name="dateCough" type="AudioStreamPlayer" parent="." unique_id=1551473000]
+stream = ExtResource("9_hu34y")
+volume_db = -1.743
+pitch_scale = 0.75
+
+[node name="good" type="AudioStreamPlayer" parent="." unique_id=847163048]
+stream = ExtResource("10_07vi2")
+volume_db = -13.944
+pitch_scale = 0.75
+
+[node name="bad" type="AudioStreamPlayer" parent="." unique_id=1498947770]
+stream = ExtResource("11_y1fbg")
+volume_db = 1.743
+pitch_scale = 0.75
+
+[node name="door" type="AudioStreamPlayer" parent="." unique_id=886388984]
+stream = ExtResource("12_trksq")
+pitch_scale = 0.75
+
+[node name="ambiance" type="AudioStreamPlayer" parent="." unique_id=1030677733]
+stream = ExtResource("14_kw5i4")
+volume_db = -10.458
+
+[node name="Date" parent="." unique_id=442524392 instance=ExtResource("14_3gd53")]
+position = Vector2(-16, -128.00002)
+scale = Vector2(0.175, 0.175)
+
+[connection signal="camera_view_changed" from="." to="Camera/Player" method="_on_restaurant_camera_view_changed"]
+[connection signal="hand_signaled" from="Camera/Player" to="." method="_on_player_hand_signaled"]
+[connection signal="timeout" from="PhoneTimer" to="." method="_on_phone_start_timer_timeout"]
+[connection signal="timeout" from="DateTimer" to="." method="_on_date_start_timer_timeout"]

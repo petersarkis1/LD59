@@ -29,8 +29,8 @@ var playerHealth: int = 5
 @onready var date_dialog: AudioStreamPlayer = $dateDialog
 var date_cooldown_timeout: int = randi_range(10,20)
 
-var inital_phone_timeout: int = randi_range(15,25)
-var phone_cooldown_timeout: int = randi_range(8,10)
+var inital_phone_timeout: int = 3 #randi_range(15,25)
+var phone_cooldown_timeout: int = 3 #randi_range(8,10)
 
 var spawn_interval: float = 5.0
 var waiter_rise_distance: float = 300.0
@@ -256,7 +256,8 @@ func _on_player_hand_signaled(side: String) -> void:
 
 func _on_phone_start_timer_timeout() -> void:
 	var phone = get_tree().root.get_node("Game/CRT-Container/CRT/World-Container/World/Restaurant/Camera/Player/Left/LeftHand_Phone/Phone")
-	phone.finished.connect(_on_phone_finished)
+	if not phone.finished.is_connected(_on_phone_finished):
+		phone.finished.connect(_on_phone_finished)
 	phone.start()
 	
 	phone_ring.play()

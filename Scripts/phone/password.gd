@@ -24,6 +24,10 @@ const PASSWORDS: Array = [
 const SYM_GLYPH: Array[String] = ["▶", "◀", "■", "●", "▶▶", "◀◀"]
 const SYM_LABEL: Array[String] = ["PLAY", "BACK", "STOP", "REC", "FF", "REW"]
 
+# Button grid layout — maps grid position (0-5) to Sym value
+# Row 1: back, play, rec   Row 2: rew, ff, stop
+const BTN_ORDER: Array = [Sym.BACK, Sym.PLAY, Sym.REC, Sym.REW, Sym.FF, Sym.STOP]
+
 const MAX_INPUT  := 8
 const FLASH_TIME := 0.6
 
@@ -237,9 +241,8 @@ func _draw() -> void:
 		var ofs: Vector2 = Vector2(1, 1) if hov else Vector2.ZERO
 		var fr:  Rect2   = Rect2(r.position + ofs, r.size)
 		_draw_winamp_btn(fr, COL_BTN_HOV if hov else COL_BTN, hov)
-		_draw_transport_symbol(i, fr, COL_BTN_TXT)
-		# Label under icon
-		var lbl: String = SYM_LABEL[i]
+		_draw_transport_symbol(BTN_ORDER[i], fr, COL_BTN_TXT)
+		var lbl: String = SYM_LABEL[BTN_ORDER[i]]
 		var ls := font.get_string_size(lbl, HORIZONTAL_ALIGNMENT_LEFT, -1, 9)
 		draw_string(font,
 			Vector2(fr.position.x + (fr.size.x - ls.x) * 0.5, fr.position.y + fr.size.y - 6.0),
@@ -350,7 +353,7 @@ func _input(event: InputEvent) -> void:
 	for i in _btn_rects.size():
 		if (_btn_rects[i] as Rect2).has_point(pos):
 			if _current_input.size() < MAX_INPUT:
-				_current_input.append(i)
+				_current_input.append(BTN_ORDER[i])
 			queue_redraw()
 			return
 

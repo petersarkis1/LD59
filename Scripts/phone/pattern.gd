@@ -108,12 +108,12 @@ func _draw_grid(origin: Vector2, cs: float, pattern: Array[int], is_ref: bool) -
 
 
 func _draw() -> void:
-	var ref_label = "Pattern"
-	var ref_label_size = ThemeDB.fallback_font.get_string_size(ref_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11)
-	draw_string(ThemeDB.fallback_font, ref_origin + Vector2((ref_cell_size * GRID - ref_label_size.x) / 2.0, -6), ref_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color.WHITE)
-	var draw_label := "Draw the pattern"
-	var draw_lsz := ThemeDB.fallback_font.get_string_size(draw_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 24)
-	draw_string(ThemeDB.fallback_font, input_origin + Vector2((cell_size * GRID - draw_lsz.x) * 0.5, -12), draw_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color.WHITE)
+	var ref_label := "MATCH THIS"
+	var ref_label_size := ThemeDB.fallback_font.get_string_size(ref_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
+	draw_string(ThemeDB.fallback_font, ref_origin + Vector2((ref_cell_size * GRID - ref_label_size.x) / 2.0, -8), ref_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
+	var draw_label := "DRAW THE PATTERN"
+	var draw_lsz := ThemeDB.fallback_font.get_string_size(draw_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 26)
+	draw_string(ThemeDB.fallback_font, input_origin + Vector2((cell_size * GRID - draw_lsz.x) * 0.5, -14), draw_label, HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color.WHITE)
 
 	_draw_grid(ref_origin, ref_cell_size, target_pattern, true)
 	_draw_grid(input_origin, cell_size, current_pattern, false)

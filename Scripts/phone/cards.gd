@@ -134,6 +134,30 @@ func _draw_rip_phase(center: Vector2) -> void:
 	_draw_pack_sheen(pack_x, pack_y + pack_h * TEAR_FRAC, pack_w, pack_h * (1.0 - TEAR_FRAC))
 	_draw_pack_sheen(pack_x + tear_offset, pack_y, pack_w, pack_h * TEAR_FRAC)
 
+	# Tear-here indicators (fade out as rip progresses)
+	var tear_alpha := 1.0 - _rip_progress
+	if tear_alpha > 0.0:
+		var tear_y := pack_y + pack_h * TEAR_FRAC
+		var font := ThemeDB.fallback_font
+		# Dotted line across the tear seam
+		var dot_gap := 8.0
+		var x := pack_x
+		while x < pack_x + pack_w:
+			draw_line(Vector2(x, tear_y), Vector2(minf(x + dot_gap * 0.5, pack_x + pack_w), tear_y),
+				Color(1, 1, 1, tear_alpha * 0.9), 2.0)
+			x += dot_gap
+		# "✂ TEAR HERE" label above the pack
+		var t := Time.get_ticks_msec() * 0.001
+		var label := "✂  TEAR HERE"
+		var lsz := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20)
+		var lx := center.x - lsz.x * 0.5
+		var above_y := pack_y - 14.0
+		draw_string(font, Vector2(lx, above_y), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color(1, 1, 1, tear_alpha))
+		# Animated ◄► arrow pulsing below label
+		var pulse := 0.6 + 0.4 * sin(t * 4.0)
+		var asz := font.get_string_size("◄  ►", HORIZONTAL_ALIGNMENT_LEFT, -1, 26)
+		draw_string(font, Vector2(center.x - asz.x * 0.5, above_y + 26), "◄  ►", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color(1, 1, 1, tear_alpha * pulse))
+
 
 func _draw_pack_sheen(x: float, y: float, w: float, h: float) -> void:
 	var t := Time.get_ticks_msec() * 0.001
@@ -197,16 +221,18 @@ func _draw_swipe_phase(center: Vector2) -> void:
 	# Card counter
 	var display_card: int = mini(_current_card + 1, CARD_COUNT)
 	var counter := "%d / %d" % [display_card, CARD_COUNT]
-	var csz     := font.get_string_size(counter, HORIZONTAL_ALIGNMENT_LEFT, -1, 12)
+	var csz     := font.get_string_size(counter, HORIZONTAL_ALIGNMENT_LEFT, -1, 20)
 	draw_string(font,
-		Vector2(center.x - csz.x * 0.5, card_y + card_h + 18),
-		counter, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color(0.6, 0.6, 0.7))
+		Vector2(center.x - csz.x * 0.5, card_y + card_h + 28),
+		counter, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
 
-	var hint := "swipe to view next"
-	var hsz  := font.get_string_size(hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 11)
+	var t2 := Time.get_ticks_msec() * 0.001
+	var pulse2 := 0.6 + 0.4 * sin(t2 * 4.0)
+	var hint := "◄  SWIPE  ►"
+	var hsz  := font.get_string_size(hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 22)
 	draw_string(font,
-		Vector2(center.x - hsz.x * 0.5, card_y + card_h + 36),
-		hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.45, 0.45, 0.55))
+		Vector2(center.x - hsz.x * 0.5, card_y + card_h + 56),
+		hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color(1, 1, 1, pulse2))
 
 
 func _draw_card(rect: Rect2, idx: int) -> void:

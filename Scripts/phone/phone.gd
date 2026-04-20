@@ -128,10 +128,12 @@ func _show_idle_screen() -> void:
 
 func _start_game() -> void:
 
+	# comment out random game selection for testing specific games
 	var game_name = GAMES[randi() % GAMES.size()]
 
 	# 0:ads, 1:pattern, 2:password, 3:case-opening, 4:tos, 5:cards
-	# var game_name = GAMES[1]
+	# uncomment to test specific games:
+	#var game_name = GAMES[5]
 
 	var script = load("res://Scripts/phone/%s.gd" % game_name)
 	_current_game = Node2D.new()

@@ -17,6 +17,7 @@ shader_parameter/rgb_offset = 0.0010000000475
 shader_parameter/flicker_speed = 2.0
 
 [node name="Game" type="Node2D" unique_id=1182577005]
+position = Vector2(0, 127)
 
 [node name="CRT-Container" type="SubViewportContainer" parent="." unique_id=1909257687]
 material = SubResource("ShaderMaterial_wowpa")

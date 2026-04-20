@@ -16,6 +16,7 @@ var waiterSpawnPositions = {
 
 @onready var good: AudioStreamPlayer = $good
 @onready var bad: AudioStreamPlayer = $bad
+@onready var ambiance: AudioStreamPlayer = $ambiance
 
 @onready var date: Node2D = $Date
 @onready var phone_timer: Timer = $PhoneTimer
@@ -27,9 +28,8 @@ var waiterSpawnPositions = {
 @onready var date_timer: Timer = $DateTimer
 @onready var date_dialog: AudioStreamPlayer = $dateDialog
 var date_cooldown_timeout: int = randi_range(10,20)
-
 var inital_phone_timeout: int = randi_range(15,25)
-var phone_cooldown_timeout: int = randi_range(8,10)
+var phone_cooldown_timeout: int = randi_range(8,12)
 
 var spawn_interval: float = 8.0
 var waiter_rise_distance: float = 300.0
@@ -73,7 +73,8 @@ var is_phone_waiting: bool = false
 var phone_waiting_duration: float = 0.0
 var phone_warning_time: float = 6.0
 var phone_warned: bool = false
-var phone_damage_time: float = 10.0
+var phone_damage_time: float = 15.0
+var level_length: float = 60.0
 
 func _ready() -> void:
 	date_dialog.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
@@ -87,6 +88,7 @@ func _process(delta: float) -> void:
 	
 func startRound() -> void:
 	date_dialog.play()
+	ambiance.play()
 	date.is_talking = true
 	add_child(spawn_timer)
 	spawn_timer.wait_time = spawn_interval
@@ -104,6 +106,7 @@ func handle_date_event(delta) -> void:
 		if is_nodding:
 			is_date_waiting = false
 			date_warned = false
+			good.play()
 			await get_tree().create_timer(1.0).timeout
 			date_dialog.play()
 			date.is_talking = true
@@ -241,7 +244,8 @@ func spawn_waiter() -> void:
 func _on_waiter_despawned(lane: String, missed: bool) -> void:
 	if missed:
 		lose_health()
-		print("missed waiter")
+	else:
+		good.play()
 	if lane == "left":
 		is_left_lane_occupied = false
 		current_left_waiter = null
@@ -282,6 +286,7 @@ func _on_phone_finished() -> void:
 	phone_timer.start(phone_cooldown_timeout)
 	phone_ring.stop()
 	phone_buzz.stop()
+	good.play()
 
 
 func _on_date_start_timer_timeout() -> void:

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://6jx4wivgyqx7" path="res://Scripts/burger.gd" id="1_je8qv"]
 [ext_resource type="Texture2D" uid="uid://dl82tn64ntpwo" path="res://Assets/food/burger.png" id="1_ys118"]
+[ext_resource type="AudioStream" uid="uid://bk74p5qc5qr8c" path="res://Assets/Audio/eat.wav" id="3_goknm"]
 
 [node name="Burger" type="Node2D" unique_id=976259433]
 script = ExtResource("1_je8qv")
@@ -9,3 +10,6 @@ script = ExtResource("1_je8qv")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2093888452]
 scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_ys118")
+
+[node name="Eat" type="AudioStreamPlayer" parent="." unique_id=2139772338]
+stream = ExtResource("3_goknm")

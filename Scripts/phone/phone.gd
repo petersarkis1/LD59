@@ -134,8 +134,8 @@ func _start_game() -> void:
 		_remaining_games.shuffle()
 
 	# 0:ads, 1:pattern, 2:password, 3:case-opening, 4:tos, 5:cards
-	#var game_name = _remaining_games.pop_back()
-	var game_name = GAMES[0]
+	var game_name = _remaining_games.pop_back()
+	#var game_name = GAMES[0]
 
 	var script = load("res://Scripts/phone/%s.gd" % game_name)
 	_current_game = Node2D.new()

@@ -22,7 +22,7 @@ Globals="*uid://dcxsmoybxogfb"
 [display]
 
 window/size/viewport_width=1392
-window/size/viewport_height=870
+window/size/viewport_height=1114
 
 [input]
 
@@ -66,3 +66,4 @@ ui_down={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

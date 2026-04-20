@@ -9,11 +9,11 @@
 script = ExtResource("1_q2qps")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038641381]
-position = Vector2(696, 496)
+position = Vector2(720, 552)
 texture = ExtResource("1_w31pl")
 
 [node name="startBtn" type="Sprite2D" parent="." unique_id=988996819]
-position = Vector2(696, 488.00006)
+position = Vector2(720, 536)
 scale = Vector2(0.41, 0.41)
 texture = ExtResource("2_fp2oq")
 

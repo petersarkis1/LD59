@@ -9,6 +9,8 @@ enum State {IDLE, PLAYING, FINISHED}
 var _state: State = State.IDLE
 var _current_game: Node2D = null
 
+var _remaining_games: Array = []
+
 @export var phone_size: Vector2 = Vector2(338, 600):
 	set(v):
 		phone_size = v
@@ -127,13 +129,13 @@ func _show_idle_screen() -> void:
 
 
 func _start_game() -> void:
-
-	# comment out random game selection for testing specific games
-	var game_name = GAMES[randi() % GAMES.size()]
+	if _remaining_games.is_empty():
+		_remaining_games = GAMES.duplicate()
+		_remaining_games.shuffle()
 
 	# 0:ads, 1:pattern, 2:password, 3:case-opening, 4:tos, 5:cards
-	# uncomment to test specific games:
-	#var game_name = GAMES[5]
+	#var game_name = _remaining_games.pop_back()
+	var game_name = GAMES[0]
 
 	var script = load("res://Scripts/phone/%s.gd" % game_name)
 	_current_game = Node2D.new()

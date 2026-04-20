@@ -4,4 +4,4 @@
 
 [resource]
 shader = ExtResource("1_r8hru")
-shader_parameter/pixel_size = 112.25200528447
+shader_parameter/pixel_size = 100.0000047025

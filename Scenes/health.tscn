@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://d41kqq01evx6"]
+
+[ext_resource type="Script" uid="uid://bedwya2byxmpu" path="res://Scripts/health.gd" id="1_1nx07"]
+
+[node name="health" type="Node2D" unique_id=689204689]
+script = ExtResource("1_1nx07")
+
+[node name="Control" type="Control" parent="." unique_id=28703919]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 120.0
+offset_bottom = 60.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Control" unique_id=1356465843]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+text = "HEALTH: "
+fit_content = true

@@ -2,9 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://ben14fulhk538" path="res://Scenes/restaurant.tscn" id="1_ebmjs"]
 [ext_resource type="Texture2D" uid="uid://d0xk2tsaqjovo" path="res://Assets/UI/hud.png" id="1_qxrlw"]
-[ext_resource type="Shader" uid="uid://b6qn5w2q0lqa2" path="res://Shaders/CRT.gdshader" id="1_wrm1d"]
+[ext_resource type="Shader" path="res://Shaders/CRT.gdshader" id="1_wrm1d"]
 [ext_resource type="PackedScene" uid="uid://dgu88nyqrm5mt" path="res://Scenes/guide.tscn" id="4_3dryh"]
-[ext_resource type="PackedScene" uid="uid://d41kqq01evx6" path="res://Scenes/health.tscn" id="5_wowpa"]
+[ext_resource type="PackedScene" path="res://Scenes/health.tscn" id="5_wowpa"]
+[ext_resource type="AudioStream" uid="uid://pftm1xqhjtqo" path="res://Assets/Audio/soundtrack.wav" id="6_i6g32"]
+[ext_resource type="Script" uid="uid://btrf8ecfkn87q" path="res://Scripts/soundtrack.gd" id="7_1l0tm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wowpa"]
 shader = ExtResource("1_wrm1d")
@@ -48,3 +50,9 @@ position = Vector2(136, 640)
 
 [node name="health" parent="CRT-Container/CRT" unique_id=689204689 instance=ExtResource("5_wowpa")]
 position = Vector2(56, 56)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1141118933]
+stream = ExtResource("6_i6g32")
+volume_db = -8.0
+autoplay = true
+script = ExtResource("7_1l0tm")

@@ -10,7 +10,7 @@ const STRIP_ITEMS   = 120
 const ITEM_SIZE     = 280.0
 const CELL_GAP      = 0.0
 const STRIP_H       = 280.0
-const SCROLL_DURATION = 9.0
+const SCROLL_DURATION = 5.0
 const RESULT_PAUSE    = 0.6
 const RESULT_DISPLAY_TIME = 1.2
 const EDGE_PAD      = 20.0
@@ -262,7 +262,7 @@ func _start_spin() -> void:
 	_strip_containers.clear()
 
 	var audio := AudioStreamPlayer.new()
-	audio.stream = load("res://Assets/Phone/case-opening/spin.wav")
+	audio.stream = load("res://Assets/Phone/case-opening/5secspin.wav")
 	add_child(audio)
 	audio.play()
 

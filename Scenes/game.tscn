@@ -42,15 +42,15 @@ render_target_update_mode = 4
 
 [node name="Restaurant" parent="CRT-Container/CRT/World-Container/World" unique_id=1584030647 instance=ExtResource("1_ebmjs")]
 
-[node name="HUD" type="Sprite2D" parent="CRT-Container/CRT/World-Container" unique_id=169299619]
-position = Vector2(360, 376)
+[node name="health" parent="CRT-Container/CRT" unique_id=689204689 instance=ExtResource("5_wowpa")]
+position = Vector2(22, 55)
+
+[node name="HUD" type="Sprite2D" parent="CRT-Container/CRT" unique_id=169299619]
+position = Vector2(696, 432)
 texture = ExtResource("3_1l0tm")
 
 [node name="guide" parent="CRT-Container/CRT" unique_id=268438558 instance=ExtResource("4_3dryh")]
 position = Vector2(136, 640)
-
-[node name="health" parent="CRT-Container/CRT" unique_id=689204689 instance=ExtResource("5_wowpa")]
-position = Vector2(56, 56)
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1141118933]
 stream = ExtResource("6_i6g32")

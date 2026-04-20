@@ -4,9 +4,9 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	rich_text_label.text = "HEALTH: 5"
+	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	rich_text_label.text = str(Globals.player_health)

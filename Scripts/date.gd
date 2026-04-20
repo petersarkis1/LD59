@@ -22,10 +22,10 @@ func _on_player_health_change(health: int) -> void:
 	happy.visible = false
 	angry.visible = false
 	confused.visible = false
-	if health >= 5:
+	if health >= 40:
 		confused.visible = true
 		active_date = confused
-	elif health >= 3:
+	elif health >= 20:
 		angry.visible = true
 		active_date = angry
 	else:

@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://vc3txegv75uj"]
+
+[ext_resource type="Script" uid="uid://dxylqpftrfpx8" path="res://Scripts/date.gd" id="1_beaj1"]
+[ext_resource type="Texture2D" uid="uid://cf8f4c4flkrts" path="res://Assets/Friend/happy2.png" id="3_si7un"]
+[ext_resource type="Texture2D" uid="uid://blhv6gv5hs6ad" path="res://Assets/Friend/Date 2_angry.png" id="4_ke87q"]
+[ext_resource type="Texture2D" uid="uid://r06xaay6qklo" path="res://Assets/Friend/angry2.png" id="5_ewego"]
+[ext_resource type="Texture2D" uid="uid://m10hyjrqnrsl" path="res://Assets/Friend/Date 2_confused.png" id="6_ytbom"]
+[ext_resource type="Texture2D" uid="uid://dad75kccyk4ka" path="res://Assets/Friend/confused2.png" id="7_nfcnt"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4xhkn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_si7un")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tn8qp"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_ke87q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ewego")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2xh25"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_ytbom")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_nfcnt")
+}],
+"loop": true,
+"name": &"new_animation",
+"speed": 5.0
+}]
+
+[node name="Date" type="Node2D" unique_id=442524392]
+script = ExtResource("1_beaj1")
+
+[node name="Happy" type="AnimatedSprite2D" parent="." unique_id=946328102]
+sprite_frames = SubResource("SpriteFrames_4xhkn")
+frame_progress = 0.5997087
+
+[node name="Angry" type="AnimatedSprite2D" parent="." unique_id=1183328290]
+visible = false
+position = Vector2(-398, -55)
+sprite_frames = SubResource("SpriteFrames_tn8qp")
+frame_progress = 0.44155496
+
+[node name="Confused" type="AnimatedSprite2D" parent="." unique_id=1685103032]
+visible = false
+position = Vector2(-104.00001, -48.999992)
+scale = Vector2(1.16, 1.16)
+sprite_frames = SubResource("SpriteFrames_2xh25")
+animation = &"new_animation"
+frame_progress = 0.5801227

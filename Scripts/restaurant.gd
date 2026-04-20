@@ -117,7 +117,6 @@ func handle_date_event(delta) -> void:
 				date_warned = true
 			if date_waiting_duration > date_damage_time:
 				lose_health()
-				print("missed date question")
 				is_date_waiting = false
 				date_warned = false
 				await get_tree().create_timer(1.0).timeout
@@ -134,12 +133,11 @@ func handle_phone_event(delta) -> void:
 			phone_warned = true
 		if phone_waiting_duration > phone_damage_time:
 			lose_health()
-			print("missed phone alarm")
 			phone_waiting_duration = 0
 
 func lose_health() -> void:
 	bad.play()
-	Globals.player_health += 1
+	Globals.player_health += 10
 	health_change.emit(Globals.player_health)
 	if Globals.player_health <= 0:
 		pass

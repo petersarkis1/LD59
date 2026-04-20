@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlxjndtexfn7w"]
 
-[ext_resource type="Script" uid="uid://b16xeevmuowf0" path="res://Scripts/restaurant.gd" id="1_3gd53"]
+[ext_resource type="Script" uid="uid://b2548bsc4siod" path="res://Scripts/restaurant2.gd" id="1_3gd53"]
 [ext_resource type="Texture2D" uid="uid://beya5yhvvwjy" path="res://Assets/Restaurant/Dinner background.jpeg" id="2_tuqso"]
 [ext_resource type="Texture2D" uid="uid://d1v6att43v7wt" path="res://Assets/Restaurant/table cloth.png" id="3_70d8y"]
 [ext_resource type="Texture2D" uid="uid://c06wnydf16nyo" path="res://Assets/Restaurant/kitchen door closed.png" id="4_i7ll8"]
@@ -63,7 +63,7 @@ volume_db = 3.486
 
 [node name="dateDialog" type="AudioStreamPlayer" parent="." unique_id=685939379]
 stream = ExtResource("8_uhx77")
-volume_db = -20.335
+volume_db = -0.581
 pitch_scale = 0.21
 
 [node name="dateCough" type="AudioStreamPlayer" parent="." unique_id=1551473000]

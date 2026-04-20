@@ -21,5 +21,6 @@ func _input(event: InputEvent) -> void:
 				if waiter.is_at_table:
 					sprite_2d.visible = false
 					drink.play()
+					Globals.player_health -= 2
 					await get_tree().create_timer(3).timeout
 					queue_free()

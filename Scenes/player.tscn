@@ -28,7 +28,6 @@ scale = Vector2(0.196, -0.196)
 texture = ExtResource("4_3smsa")
 
 [node name="LeftHand_Phone" type="Sprite2D" parent="Left" unique_id=45090948]
-visible = false
 material = ExtResource("2_fkybt")
 position = Vector2(405.99997, 442.99997)
 rotation = 2.443461
@@ -37,9 +36,9 @@ texture = ExtResource("4_x3wgy")
 
 [node name="Phone" type="Node2D" parent="Left/LeftHand_Phone" unique_id=1224081279]
 z_index = -1
-position = Vector2(-136.43478, -823.7789)
+position = Vector2(-114.80696, -817.4504)
 rotation = -0.20943952
-scale = Vector2(-2.06, 2.06)
+scale = Vector2(-2.13, 2.06)
 script = ExtResource("5_x3wgy")
 phone_size = Vector2(338, 750)
 

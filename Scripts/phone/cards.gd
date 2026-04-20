@@ -6,29 +6,24 @@ var phone_position: Vector2
 var phone_size: Vector2
 
 # ── Card images ──────────────────────────────────────────────────────
-const CARD_IMAGES := [
-	"res://Assets/Phone/cards/witch.png",
-	"res://Assets/Phone/cards/candy.png",
-	"res://Assets/Phone/cards/frankenstein.png",
-	"res://Assets/Phone/cards/dracula.png",
-	"res://Assets/Phone/cards/jason.png",
-	"res://Assets/Phone/cards/ghostface.png",
-	"res://Assets/Phone/cards/blob.png",
-	"res://Assets/Phone/cards/ghost.png",
-	"res://Assets/Phone/cards/devil.png",
-	"res://Assets/Phone/cards/shrek.png",
-	"res://Assets/Phone/cards/pumpkin.png",
-]
-const CARD_COUNT := 5
+const HAMPTERS_DIR := "res://Assets/Phone/cards/hampters/"
+const PACK_TEXTURE := "res://Assets/Phone/cards/card_pack/pack.png"
+const CARD_COUNT := 10
 
 # ── State ────────────────────────────────────────────────────────────
-enum Phase { RIPPING, SWIPING, DONE }
+enum Phase { RIPPING, SWIPING }
 var _phase: Phase = Phase.RIPPING
 
+# Common → Rare → Ultra Rare → Secret Rare (YGO/Pokemon ladder)
+enum Rarity { COMMON, RARE, ULTRA_RARE, SECRET_RARE }
+
 var _cards: Array[Texture2D] = []
+var _card_rarities: Array[int] = []
+var _pack_tex: Texture2D
 
 # Rip phase
 var _rip_progress: float = 0.0   # 0 to 1
+var _rip_direction: float = 1.0  # +1 right, -1 left
 var _rip_dragging: bool = false
 var _rip_start_x: float = 0.0
 var _rip_current_x: float = 0.0
@@ -41,33 +36,59 @@ var _swipe_dragging: bool = false
 var _swipe_start_x: float = 0.0
 var _swipe_velocity: float = 0.0
 var _swipe_animating: bool = false
-var _swipe_target: float = 0.0
-const SWIPE_THRESHOLD := 80.0
-const SWIPE_ANIM_SPEED := 12.0
+var _flying_card: int = -1        # index of card currently animating off-screen
+var _flying_offset: float = 0.0
+var _flying_target: float = 0.0
+var _waiting_to_finish: bool = false
+const SWIPE_THRESHOLD := 60.0
+const SWIPE_ANIM_SPEED := 18.0
+const FLY_SPEED := 1600.0
 
 
 func setup(pos: Vector2, size: Vector2) -> void:
 	phone_position = pos
 	phone_size     = size
 
-	# Pick 5 random cards
-	var pool := CARD_IMAGES.duplicate()
+	# Pick 5 random cards from the hampters folder
+	var dir := DirAccess.open(HAMPTERS_DIR)
+	var pool: Array[String] = []
+	if dir:
+		dir.list_dir_begin()
+		var fname := dir.get_next()
+		while fname != "":
+			if fname.ends_with(".png"):
+				pool.append(HAMPTERS_DIR + fname)
+			fname = dir.get_next()
+		dir.list_dir_end()
+	_pack_tex = load(PACK_TEXTURE)
 	pool.shuffle()
 	for i in CARD_COUNT:
-		var tex: Texture2D = load(pool[i])
-		_cards.append(tex)
+		_cards.append(load(pool[i]) as Texture2D)
+
+	# 10-card pack: 6 Common → 2 Uncommon (silver) → 1 Rare (gold) → 1 Secret Rare
+	for i in 6:
+		_card_rarities.append(Rarity.COMMON)
+	for i in 2:
+		_card_rarities.append(Rarity.RARE)
+	_card_rarities.append(Rarity.ULTRA_RARE)
+	_card_rarities.append(Rarity.SECRET_RARE)
 
 
 func _process(delta: float) -> void:
-	if _phase == Phase.SWIPING and _swipe_animating:
-		_swipe_offset = lerp(_swipe_offset, _swipe_target, SWIPE_ANIM_SPEED * delta)
-		if abs(_swipe_offset - _swipe_target) < 1.0:
-			# Snap-complete: reset offset so the next card draws from center
-			_swipe_offset = 0.0
-			_swipe_animating = false
-			_swipe_target = 0.0
-			if _current_card >= CARD_COUNT:
-				_phase = Phase.DONE
+	if _phase == Phase.SWIPING:
+		# Animate flying card off-screen at constant speed
+		if _flying_card >= 0:
+			_flying_offset = move_toward(_flying_offset, _flying_target, FLY_SPEED * delta)
+			if _flying_offset == _flying_target:
+				_flying_card = -1
+				if _waiting_to_finish:
+					finished.emit()
+		# Spring current card back to center
+		if _swipe_animating:
+			_swipe_offset = lerp(_swipe_offset, 0.0, SWIPE_ANIM_SPEED * delta)
+			if abs(_swipe_offset) < 1.0:
+				_swipe_offset = 0.0
+				_swipe_animating = false
 	queue_redraw()
 
 
@@ -82,13 +103,9 @@ func _draw() -> void:
 		_draw_rip_phase(center)
 	elif _phase == Phase.SWIPING:
 		_draw_swipe_phase(center)
-	elif _phase == Phase.DONE:
-		_draw_done(center)
 
 
 func _draw_rip_phase(center: Vector2) -> void:
-	var font := ThemeDB.fallback_font
-
 	# Pack rectangle
 	var pack_w := phone_size.x * 0.72
 	var pack_h := phone_size.y * 0.62
@@ -96,31 +113,65 @@ func _draw_rip_phase(center: Vector2) -> void:
 	var pack_y := center.y - pack_h * 0.5 - 20.0
 
 	# Rip tear offset — top half shifts right as you rip
-	var tear_offset := _rip_progress * pack_w * 0.6
+	var tear_offset := _rip_direction * _rip_progress * pack_w * 0.6
 
-	# Body of pack (almost all of it)
-	draw_rect(Rect2(pack_x, pack_y + pack_h * 0.1, pack_w, pack_h * 0.9),
-		Color(0.85, 0.2, 0.2), true)
+	const TEAR_FRAC := 0.11
+	var tex_w: float = _pack_tex.get_width()
+	var tex_h: float = _pack_tex.get_height()
+	var split_src := tex_h * TEAR_FRAC
 
-	# Just the lip at the top shifts with rip
-	draw_rect(Rect2(pack_x + tear_offset, pack_y, pack_w, pack_h * 0.12),
-		Color(0.95, 0.25, 0.25), true)
+	# Body — bottom portion stays fixed
+	draw_texture_rect_region(_pack_tex,
+		Rect2(pack_x, pack_y + pack_h * TEAR_FRAC, pack_w, pack_h * (1.0 - TEAR_FRAC)),
+		Rect2(0, split_src, tex_w, tex_h - split_src))
 
-	# Pack sheen line
-	draw_line(
-		Vector2(pack_x + tear_offset + pack_w * 0.15, pack_y + 8),
-		Vector2(pack_x + tear_offset + pack_w * 0.2,  pack_y + pack_h * 0.1),
-		Color(1.0, 1.0, 1.0, 0.25), 6.0, true)
+	# Lip — top portion shifts with rip direction
+	draw_texture_rect_region(_pack_tex,
+		Rect2(pack_x + tear_offset, pack_y, pack_w, pack_h * TEAR_FRAC),
+		Rect2(0, 0, tex_w, split_src))
 
-	# Tear line near top
-	var tear_y := pack_y + pack_h * 0.11
+	# Shiny foil overlay — body and lip separately so it follows the tear
+	_draw_pack_sheen(pack_x, pack_y + pack_h * TEAR_FRAC, pack_w, pack_h * (1.0 - TEAR_FRAC))
+	_draw_pack_sheen(pack_x + tear_offset, pack_y, pack_w, pack_h * TEAR_FRAC)
 
-	# Pack label (stays fixed on the body)
-	var lbl := "HAMPTER PACK"
-	var lsz := font.get_string_size(lbl, HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
-	draw_string(font,
-		Vector2(pack_x + (pack_w - lsz.x) * 0.5, pack_y + pack_h * 0.25),
-		lbl, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color.WHITE)
+
+func _draw_pack_sheen(x: float, y: float, w: float, h: float) -> void:
+	var t := Time.get_ticks_msec() * 0.001
+
+	# Subtle iridescent base — thin diagonal stripes cycling through cool hues
+	for i in 6:
+		var hue := fmod(t * 0.08 + float(i) / 6.0 * 0.25 + 0.55, 1.0)
+		var col := Color.from_hsv(hue, 0.35, 1.0, 0.06)
+		var slope := h
+		var span := w + slope
+		var stripe_w := span / 6.0
+		var base := x + float(i) * stripe_w - slope
+		var pts := PackedVector2Array()
+		pts.append(Vector2(base, y))
+		pts.append(Vector2(base + stripe_w, y))
+		pts.append(Vector2(base + stripe_w + slope, y + h))
+		pts.append(Vector2(base + slope, y + h))
+		var clipped := _clip_poly_x(pts, x, x + w)
+		if clipped.size() >= 3:
+			draw_colored_polygon(clipped, col)
+
+	# Bright specular streak sweeping left to right every 3.5s
+	var progress := fmod(t / 3.5, 1.0)
+	var streak_x := x - w * 0.3 + progress * (w * 1.6)
+	var streak_w := w * 0.18
+	var slope2 := h * 0.7
+	var pts2 := PackedVector2Array()
+	pts2.append(Vector2(streak_x, y))
+	pts2.append(Vector2(streak_x + streak_w, y))
+	pts2.append(Vector2(streak_x + streak_w + slope2, y + h))
+	pts2.append(Vector2(streak_x + slope2, y + h))
+	var clipped2 := _clip_poly_x(pts2, x, x + w)
+	if clipped2.size() >= 3:
+		# Fade in/out at edges of sweep
+		var fade := sin(progress * PI)
+		var streak_col := Color(1.0, 0.98, 0.92, 0.38 * fade)
+		draw_colored_polygon(clipped2, streak_col)
+
 
 func _draw_swipe_phase(center: Vector2) -> void:
 	var font := ThemeDB.fallback_font
@@ -129,20 +180,23 @@ func _draw_swipe_phase(center: Vector2) -> void:
 	var card_h := phone_size.y * 0.62
 	var card_y := center.y - card_h * 0.5 - 20.0
 
-	# Draw next card underneath
-	if _current_card + 1 < CARD_COUNT:
-		draw_rect(Rect2(center.x - card_w * 0.5, card_y, card_w, card_h),
-			Color(1.0, 0.97, 0.9), true)
-		draw_rect(Rect2(center.x - card_w * 0.5, card_y, card_w, card_h),
-			Color(0.7, 0.6, 0.4), false, 2.5)
+	var cx := center.x - card_w * 0.5
 
-	# Draw current card on top with swipe offset
-	var card_x := center.x - card_w * 0.5 + _swipe_offset
-	draw_rect(Rect2(card_x, card_y, card_w, card_h), Color(1.0, 0.97, 0.9), true)
-	draw_rect(Rect2(card_x, card_y, card_w, card_h), Color(0.7, 0.6, 0.4), false, 2.5)
+	# Draw next card underneath — only when there is one
+	if _current_card + 1 < CARD_COUNT:
+		_draw_card(Rect2(cx, card_y, card_w, card_h), _current_card + 1)
+
+	# Draw current card on top with drag offset
+	if _current_card < CARD_COUNT:
+		_draw_card(Rect2(cx + _swipe_offset, card_y, card_w, card_h), _current_card)
+
+	# Draw flying card animating off-screen on top of everything
+	if _flying_card >= 0 and _flying_card < _cards.size():
+		_draw_card(Rect2(cx + _flying_offset, card_y, card_w, card_h), _flying_card)
 
 	# Card counter
-	var counter := "%d / %d" % [min(_current_card + 1, CARD_COUNT), CARD_COUNT]
+	var display_card: int = mini(_current_card + 1, CARD_COUNT)
+	var counter := "%d / %d" % [display_card, CARD_COUNT]
 	var csz     := font.get_string_size(counter, HORIZONTAL_ALIGNMENT_LEFT, -1, 12)
 	draw_string(font,
 		Vector2(center.x - csz.x * 0.5, card_y + card_h + 18),
@@ -155,19 +209,81 @@ func _draw_swipe_phase(center: Vector2) -> void:
 		hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, Color(0.45, 0.45, 0.55))
 
 
-func _draw_done(center: Vector2) -> void:
-	var font := ThemeDB.fallback_font
-	var msg  := "Pack Opened!"
-	var msz  := font.get_string_size(msg, HORIZONTAL_ALIGNMENT_LEFT, -1, 24)
-	draw_string(font,
-		Vector2(center.x - msz.x * 0.5, center.y - 20),
-		msg, HORIZONTAL_ALIGNMENT_LEFT, -1, 24, Color(1.0, 0.85, 0.2))
+func _draw_card(rect: Rect2, idx: int) -> void:
+	draw_rect(rect, Color(1.0, 0.97, 0.9), true)
+	draw_texture_rect(_cards[idx], rect, false)
+	if _card_rarities[idx] != Rarity.COMMON:
+		_draw_rarity_filter(rect, _card_rarities[idx])
+	draw_rect(rect, _rarity_border_color(_card_rarities[idx]), false, 4.0)
 
-	var sub  := "tap to finish"
-	var ssz  := font.get_string_size(sub, HORIZONTAL_ALIGNMENT_LEFT, -1, 13)
-	draw_string(font,
-		Vector2(center.x - ssz.x * 0.5, center.y + 16),
-		sub, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(0.6, 0.6, 0.7))
+
+func _rarity_border_color(rarity: int) -> Color:
+	var t := Time.get_ticks_msec() * 0.001
+	match rarity:
+		Rarity.RARE:        return Color(0.75, 0.85, 0.95)
+		Rarity.ULTRA_RARE:  return Color(0.95, 0.72, 0.05)
+		Rarity.SECRET_RARE: return Color.from_hsv(fmod(t * 0.4, 1.0), 1.0, 1.0)
+		_:                  return Color(0.7, 0.6, 0.4)
+
+
+func _draw_rarity_filter(rect: Rect2, rarity: int) -> void:
+	match rarity:
+		Rarity.RARE:        _draw_wavy_shimmer(rect, 0.58, 0.10, 0.15, 0.08, 0.0)
+		Rarity.ULTRA_RARE:  _draw_wavy_shimmer(rect, 0.08, 0.06, 0.95, 0.09, 0.0)
+		Rarity.SECRET_RARE: _draw_wavy_shimmer(rect, 0.0,  1.0,  0.9,  0.09, 0.12)
+
+
+# Shared wavy stripe engine used by all rarity filters
+# hue_speed: how fast hue shifts over time (0 = locked colour, 0.12 = full rainbow cycle)
+func _draw_wavy_shimmer(rect: Rect2, hue_base: float, hue_range: float, saturation: float, alpha: float, hue_speed: float) -> void:
+	var t := Time.get_ticks_msec() * 0.001
+	var n := 48
+	var slope := rect.size.y
+	var span := rect.size.x + slope
+	var stripe_w := span / 10.0
+	var steps := 24
+	for i in n:
+		var hue := fmod(t * hue_speed + hue_base + float(i) / n * hue_range, 1.0)
+		var col := Color.from_hsv(hue, saturation, 1.0, alpha)
+		var base := rect.position.x + i * (span / n) - slope
+		var phase := float(i) / n * TAU
+		var pts := PackedVector2Array()
+		for s in steps + 1:
+			var frac: float = float(s) / steps
+			var y: float = rect.position.y + frac * rect.size.y
+			var wave: float = sin(frac * TAU * 2.5 + t * 0.9 + phase) * 8.0 \
+							+ sin(frac * TAU * 1.0 + t * 0.5 + phase * 0.5) * 4.0
+			pts.append(Vector2(base + frac * slope + wave, y))
+		for s in range(steps, -1, -1):
+			var frac: float = float(s) / steps
+			var y: float = rect.position.y + frac * rect.size.y
+			var wave: float = sin(frac * TAU * 2.5 + t * 0.9 + phase) * 8.0 \
+							+ sin(frac * TAU * 1.0 + t * 0.5 + phase * 0.5) * 4.0
+			pts.append(Vector2(base + stripe_w + frac * slope + wave, y))
+		var clipped := _clip_poly_x(pts, rect.position.x, rect.position.x + rect.size.x)
+		if clipped.size() >= 3:
+			draw_colored_polygon(clipped, col)
+
+
+func _clip_poly_x(pts: PackedVector2Array, x_min: float, x_max: float) -> PackedVector2Array:
+	var tmp := _clip_poly_half(pts, x_min, true)
+	return _clip_poly_half(tmp, x_max, false)
+
+
+func _clip_poly_half(pts: PackedVector2Array, x_edge: float, keep_right: bool) -> PackedVector2Array:
+	var out := PackedVector2Array()
+	var n: int = pts.size()
+	for i in n:
+		var a: Vector2 = pts[i]
+		var b: Vector2 = pts[(i + 1) % n]
+		var a_in: bool = (a.x >= x_edge) == keep_right
+		var b_in: bool = (b.x >= x_edge) == keep_right
+		if a_in:
+			out.append(a)
+		if a_in != b_in:
+			var tt: float = (x_edge - a.x) / (b.x - a.x)
+			out.append(Vector2(x_edge, a.y + tt * (b.y - a.y)))
+	return out
 
 
 # ── Input ─────────────────────────────────────────────────────────────
@@ -176,9 +292,6 @@ func _input(event: InputEvent) -> void:
 		_input_rip(event)
 	elif _phase == Phase.SWIPING:
 		_input_swipe(event)
-	elif _phase == Phase.DONE:
-		if event is InputEventMouseButton and event.pressed:
-			finished.emit()
 
 
 func _input_rip(event: InputEvent) -> void:
@@ -194,8 +307,10 @@ func _input_rip(event: InputEvent) -> void:
 
 	elif event is InputEventMouseMotion and _rip_dragging:
 		_rip_current_x = event.position.x
-		var delta_x: float = abs(_rip_current_x - _rip_start_x)
-		_rip_progress = clamp(delta_x / RIP_DISTANCE, 0.0, 1.0)
+		var raw_dx: float = _rip_current_x - _rip_start_x
+		if abs(raw_dx) > 4.0:
+			_rip_direction = sign(raw_dx)
+		_rip_progress = clamp(abs(raw_dx) / RIP_DISTANCE, 0.0, 1.0)
 		if _rip_progress >= 1.0:
 			_rip_dragging = false
 			_phase = Phase.SWIPING
@@ -203,7 +318,6 @@ func _input_rip(event: InputEvent) -> void:
 
 
 func _input_swipe(event: InputEvent) -> void:
-
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			var pos: Vector2 = make_input_local(event).position
@@ -211,20 +325,26 @@ func _input_swipe(event: InputEvent) -> void:
 				_swipe_dragging = true
 				_swipe_start_x  = event.position.x
 				_swipe_velocity = 0.0
+				_swipe_animating = false
 		else:
 			_swipe_dragging = false
-			if abs(_swipe_offset) >= SWIPE_THRESHOLD:
-				# Commit the swipe: fly the card off-screen in the direction dragged
-				_swipe_target    = sign(_swipe_offset) * phone_size.x * 1.2
-				_swipe_animating = true
-				_current_card   += 1
+			var flick: bool = abs(_swipe_velocity) >= 10.0
+			var commit_dir: float = sign(_swipe_offset) if abs(_swipe_offset) > 0.1 else sign(_swipe_velocity)
+			if (abs(_swipe_offset) >= SWIPE_THRESHOLD or flick) and commit_dir != 0 and _current_card < CARD_COUNT:
+				# Launch current card off-screen, immediately advance
+				_flying_card   = _current_card
+				_flying_offset = _swipe_offset
+				_flying_target = commit_dir * phone_size.x * 1.5
+				_current_card += 1
+				_swipe_offset  = 0.0
+				if _current_card >= CARD_COUNT:
+					_waiting_to_finish = true
 			else:
-				# Not far enough — spring back to center
-				_swipe_target    = 0.0
+				# Not far enough — spring back
 				_swipe_animating = true
 
 	elif event is InputEventMouseMotion and _swipe_dragging:
-		var dx: float  = event.position.x - _swipe_start_x
+		var dx: float   = event.position.x - _swipe_start_x
 		_swipe_velocity = dx - _swipe_offset
 		_swipe_offset   = dx
 		queue_redraw()

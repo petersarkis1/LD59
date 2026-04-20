@@ -92,7 +92,10 @@ func _show_idle_screen() -> void:
 
 
 func _start_game() -> void:
-	var game_name = GAMES[3]
+
+	# var game_name = GAMES[randi() % GAMES.size()]
+	var game_name = GAMES[2]
+
 	var script = load("res://Scripts/phone/%s.gd" % game_name)
 	_current_game = Node2D.new()
 	_current_game.set_script(script)

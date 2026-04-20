@@ -20,10 +20,15 @@ var _current_game: Node2D = null
 var _tap_player: AudioStreamPlayer
 var _sub_viewport: SubViewport
 
+var _reflection_texture: Texture2D
+
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, phone_size), Color.BLACK, true)
+	if _state == State.IDLE and _reflection_texture:
+		draw_texture_rect(_reflection_texture, Rect2(Vector2.ZERO, phone_size), false, Color(1, 1, 1, 0.15))
 
 func _ready() -> void:
+	_reflection_texture = load("res://Assets/Phone/reflection.png")
 	_tap_player = AudioStreamPlayer.new()
 	_tap_player.stream = load("res://Assets/Phone/phone-tap.wav")
 	add_child(_tap_player)
@@ -73,6 +78,7 @@ func _clear_screen() -> void:
 func _transition(next: State) -> void:
 	_clear_screen()
 	_state = next
+	queue_redraw()
 	match next:
 		State.IDLE:
 			_show_idle_screen()
@@ -83,12 +89,7 @@ func _transition(next: State) -> void:
 
 
 func _show_idle_screen() -> void:
-	var label = Label.new()
-	label.text = "Idle"
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_sub_viewport.add_child(label)
+	pass
 
 
 func _start_game() -> void:

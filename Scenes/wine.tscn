@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://4eg1nk8vdqp0"]
+
+[ext_resource type="Texture2D" uid="uid://cfpi8pwmmy27d" path="res://Assets/food/wine.png" id="1_h108a"]
+
+[node name="wine" type="Node2D" unique_id=1637878203]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=816925646]
+scale = Vector2(0.13, 0.13)
+texture = ExtResource("1_h108a")

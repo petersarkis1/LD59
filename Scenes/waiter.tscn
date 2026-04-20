@@ -4,6 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://dbx1v5tmccocy" path="res://Assets/Waiter/waiterWalk1.png" id="2_bufwb"]
 [ext_resource type="Texture2D" uid="uid://fbdnncmh2rm3" path="res://Assets/Waiter/epoint.png" id="3_4lx1f"]
 [ext_resource type="Texture2D" uid="uid://c6i4cpkscey3b" path="res://Assets/Waiter/waiterWalk2.png" id="3_k76bp"]
+[ext_resource type="Texture2D" uid="uid://c1aeifwvihbh5" path="res://Assets/Waiter/waiter_pose.png" id="5_k76bp"]
+[ext_resource type="AudioStream" uid="uid://c1p0loyfb66u6" path="res://Assets/Audio/footsteps.wav" id="6_l8app"]
+[ext_resource type="PackedScene" uid="uid://lkjn2tnl0ayf" path="res://Scenes/burger.tscn" id="7_nbisv"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_l8app"]
 animations = [{
@@ -33,3 +36,18 @@ frame_progress = 0.86132085
 position = Vector2(-24, -232)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("3_4lx1f")
+
+[node name="TablePose" type="Sprite2D" parent="." unique_id=998170116]
+visible = false
+position = Vector2(40, 64)
+scale = Vector2(0.39, 0.39)
+texture = ExtResource("5_k76bp")
+
+[node name="footsteps" type="AudioStreamPlayer" parent="." unique_id=521976245]
+stream = ExtResource("6_l8app")
+volume_db = -24.717
+
+[node name="Food" type="Node2D" parent="." unique_id=1979840733]
+position = Vector2(64, -144)
+
+[node name="Burger" parent="Food" unique_id=976259433 instance=ExtResource("7_nbisv")]

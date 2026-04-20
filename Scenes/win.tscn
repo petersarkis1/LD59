@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://mueh6npenj5i"]
+
+[ext_resource type="Texture2D" uid="uid://brdhr5aem1dt8" path="res://Assets/title/silhowin-screen.png" id="2_611cj"]
+[ext_resource type="PackedScene" uid="uid://n2cxf8pnky0s" path="res://Scenes/player.tscn" id="3_g1l0l"]
+
+[node name="win" type="Node2D" unique_id=705920851]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038641381]
+position = Vector2(696, 496)
+texture = ExtResource("2_611cj")
+
+[node name="Player" parent="." unique_id=1459030903 instance=ExtResource("3_g1l0l")]

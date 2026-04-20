@@ -22,6 +22,7 @@ var waiterSpawnPositions = {
 @onready var phone_ring: AudioStreamPlayer = $PhoneRing
 @onready var phone_buzz: AudioStreamPlayer = $PhoneBuzz
 @onready var date_cough: AudioStreamPlayer = $dateCough
+@onready var door: AudioStreamPlayer = $door
 
 @onready var date_timer: Timer = $DateTimer
 @onready var date_dialog: AudioStreamPlayer = $dateDialog
@@ -233,8 +234,10 @@ func spawn_waiter() -> void:
 		current_right_waiter = waiter
 	
 	add_child(waiter)
+	door.play()
 
 func _on_waiter_despawned(lane: String) -> void:
+	lose_health()
 	if lane == "left":
 		is_left_lane_occupied = false
 		current_left_waiter = null
@@ -243,12 +246,12 @@ func _on_waiter_despawned(lane: String) -> void:
 		current_right_waiter = null
 
 func _on_player_hand_signaled(side: String) -> void:
-	if camera_pos == "center":
+	if camera_pos == "center" and not is_round_started:
 		is_round_started = true
 		startRound()
-	if side == "Left" and is_instance_valid(current_left_waiter):
+	if camera_pos == "left" and side == "Left" and is_instance_valid(current_left_waiter):
 		current_left_waiter.is_signaled = true
-	elif side == "Right" and is_instance_valid(current_right_waiter):
+	elif camera_pos == "right" and side == "Right" and is_instance_valid(current_right_waiter):
 		current_right_waiter.is_signaled = true
 
 

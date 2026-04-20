@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="WaiterWaiter"
-run/main_scene="uid://ckvlyjdh4lxoo"
+run/main_scene="uid://bmyab3enhp8c8"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 

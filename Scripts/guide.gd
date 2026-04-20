@@ -17,8 +17,8 @@ var messages: Array[String] = [
 	"Use WASD to move around and get a good look of your environment",
 	"During service waiters will be coming by on both the left and right. Be sure to flag them down because we aint got time to wait.",
 	"Of course make sure you are playing attention to the lady of the hour! Oh how I wish I were in her shoes. If she pauses to get your reaction make sure you always nod in agreement *space bar*",
-	"And if that horrendous phone alarm goes off again make sure you silence that quickly before your date notices",
-	"When youre ready to kickstart the night give her a wave"
+	"And if that horrendous phone alarm goes off again make sure you silence that quickly before your date notices *Look down with S*",
+	"When youre ready to kickstart the night give her a wave *Left click*"
 ]
 var message_index: int = 0
 

@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://kr4vfvwya0h7"]
 
-[ext_resource type="Script" uid="uid://bulu458tqwyaw" path="res://Scripts/title.gd" id="1_04a82"]
+[ext_resource type="Script" uid="uid://bpp2fg6htrm8b" path="res://Scripts/lose.gd" id="1_qgh6o"]
 [ext_resource type="Texture2D" uid="uid://dlfaq7sa513sw" path="res://Assets/UI/title_LOSER.png" id="2_04a82"]
 [ext_resource type="Texture2D" uid="uid://didoc8sawrgo7" path="res://Assets/UI/start.png" id="3_qgh6o"]
 [ext_resource type="AudioStream" uid="uid://bojm0ys0ljt20" path="res://Assets/Audio/NIGHTMARENIGHTMARENIGHTMARE.wav" id="4_qgh6o"]
 
 [node name="title" type="Node2D" unique_id=705920851]
 scale = Vector2(0.265, 0.265)
-script = ExtResource("1_04a82")
+script = ExtResource("1_qgh6o")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038641381]
 position = Vector2(2626.415, 2113.2075)

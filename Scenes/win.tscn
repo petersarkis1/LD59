@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://n2cxf8pnky0s" path="res://Scenes/player.tscn" id="3_g1l0l"]
 
 [node name="win" type="Node2D" unique_id=705920851]
+position = Vector2(168, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1038641381]
 position = Vector2(696, 560.00006)

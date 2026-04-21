@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://didoc8sawrgo7" path="res://Assets/UI/start.png" id="3_fp2oq"]
 
 [node name="title" type="Node2D" unique_id=705920851]
+position = Vector2(160, 0)
 scale = Vector2(0.265, 0.265)
 script = ExtResource("1_q2qps")
 

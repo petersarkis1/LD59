@@ -262,7 +262,7 @@ func _on_player_hand_signaled(side: String) -> void:
 
 
 func _on_phone_start_timer_timeout() -> void:
-	var phone = get_tree().root.get_node("Game/CRT-Container/CRT/World-Container/World/Restaurant/Camera/Player/Left/LeftHand_Phone/Phone")
+	var phone = find_child("Phone", true, false)
 	if not phone.finished.is_connected(_on_phone_finished):
 		phone.finished.connect(_on_phone_finished)
 	phone.start()

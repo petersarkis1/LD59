@@ -58,7 +58,7 @@ func _adjacent(a: int, b: int) -> bool:
 
 # Builds target_pattern as a random walk of adjacent unvisited nodes
 func _generate_pattern() -> void:
-	var length = randi_range(max(GRID * GRID - 4, 1), max(GRID * GRID - 2, 2))
+	var length = randi_range(4, 6)
 	target_pattern.clear()
 	var start = randi() % (GRID * GRID)
 	target_pattern.append(start)

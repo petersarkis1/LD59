@@ -1,17 +1,21 @@
 [gd_scene format=3 uid="uid://vc3txegv75uj"]
 
 [ext_resource type="Script" uid="uid://dxylqpftrfpx8" path="res://Scripts/date.gd" id="1_beaj1"]
-[ext_resource type="Texture2D" uid="uid://cf8f4c4flkrts" path="res://Assets/Friend/happy2.png" id="3_si7un"]
-[ext_resource type="Texture2D" uid="uid://blhv6gv5hs6ad" path="res://Assets/Friend/Date 2_angry.png" id="4_ke87q"]
-[ext_resource type="Texture2D" uid="uid://r06xaay6qklo" path="res://Assets/Friend/angry2.png" id="5_ewego"]
-[ext_resource type="Texture2D" uid="uid://m10hyjrqnrsl" path="res://Assets/Friend/Date 2_confused.png" id="6_ytbom"]
-[ext_resource type="Texture2D" uid="uid://dad75kccyk4ka" path="res://Assets/Friend/confused2.png" id="7_nfcnt"]
+[ext_resource type="Texture2D" uid="uid://bm15spwvv0qbf" path="res://Assets/businessmen/menA1.png" id="2_beaj1"]
+[ext_resource type="Texture2D" uid="uid://ddr35d8uj05wf" path="res://Assets/businessmen/menA2.png" id="3_gc8ol"]
+[ext_resource type="Texture2D" uid="uid://wqo0b4rqxm21" path="res://Assets/businessmen/MenC1.png" id="4_si7un"]
+[ext_resource type="Texture2D" uid="uid://6mkqnn10umuo" path="res://Assets/businessmen/MenC2.png" id="5_ke87q"]
+[ext_resource type="Texture2D" uid="uid://bcxmh6l2q2y44" path="res://Assets/businessmen/MenB1.png" id="6_ewego"]
+[ext_resource type="Texture2D" uid="uid://dx6t8jjletbr7" path="res://Assets/businessmen/MenB2.png" id="7_ytbom"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4xhkn"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_si7un")
+"texture": ExtResource("2_beaj1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_gc8ol")
 }],
 "loop": true,
 "name": &"default",
@@ -22,10 +26,10 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_ke87q")
+"texture": ExtResource("4_si7un")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_ewego")
+"texture": ExtResource("5_ke87q")
 }],
 "loop": true,
 "name": &"default",
@@ -36,10 +40,10 @@ animations = [{
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_ytbom")
+"texture": ExtResource("6_ewego")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_nfcnt")
+"texture": ExtResource("7_ytbom")
 }],
 "loop": true,
 "name": &"new_animation",
@@ -50,19 +54,22 @@ animations = [{
 script = ExtResource("1_beaj1")
 
 [node name="Happy" type="AnimatedSprite2D" parent="." unique_id=946328102]
+scale = Vector2(3.86, 3.86)
 sprite_frames = SubResource("SpriteFrames_4xhkn")
-frame_progress = 0.5997087
+frame = 1
+frame_progress = 0.7326318
 
 [node name="Angry" type="AnimatedSprite2D" parent="." unique_id=1183328290]
 visible = false
-position = Vector2(-398, -55)
+position = Vector2(-16.000061, 47.999992)
+scale = Vector2(3.965, 3.965)
 sprite_frames = SubResource("SpriteFrames_tn8qp")
 frame_progress = 0.44155496
 
 [node name="Confused" type="AnimatedSprite2D" parent="." unique_id=1685103032]
 visible = false
-position = Vector2(-104.00001, -48.999992)
-scale = Vector2(1.16, 1.16)
+position = Vector2(16, 32)
+scale = Vector2(3.995, 3.995)
 sprite_frames = SubResource("SpriteFrames_2xh25")
 animation = &"new_animation"
 frame_progress = 0.5801227

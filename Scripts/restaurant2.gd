@@ -28,10 +28,10 @@ var waiterSpawnPositions = {
 @onready var date_timer: Timer = $DateTimer
 @onready var date_dialog: AudioStreamPlayer = $dateDialog
 var date_cooldown_timeout: int = randi_range(10,20)
-var inital_phone_timeout: int = randi_range(15,25)
-var phone_cooldown_timeout: int = randi_range(8,12)
+var inital_phone_timeout: int = randi_range(1,3)
+var phone_cooldown_timeout: int = randi_range(8,9)
 
-var spawn_interval: float = 8.0
+var spawn_interval: float = 6.0
 var waiter_rise_distance: float = 300.0
 var waiter_rise_duration: float = 1.5
 var waiter_initial_scale: float = 0.1

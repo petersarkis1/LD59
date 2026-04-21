@@ -7,8 +7,9 @@ var current_level_time: float = 0.0
 @onready var curtains: Sprite2D = $"CRT-Container/CRT/curtains"
 
 const RESTAURANT = preload("res://Scenes/restaurant.tscn")
+const RESTAURANT_1_5 = preload("res://Scenes/restaurant1_5.tscn")
 const RESTAURANT_2 = preload("res://Scenes/restaurant2.tscn")
-var levels = [RESTAURANT, RESTAURANT_2]
+var levels = [RESTAURANT, RESTAURANT_1_5, RESTAURANT_2]
 var local_cur_level
 
 # Called when the node enters the scene tree for the first time.

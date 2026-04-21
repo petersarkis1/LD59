@@ -53,7 +53,7 @@ func setup(pos: Vector2, size: Vector2) -> void:
 	var area_left  := phone_position.x + 4.0
 	var area_w     := phone_size.x - 8.0
 
-	for i in 25:
+	for i in randi_range(15, 30):
 		var sprite  := Sprite2D.new()
 		var tex: Texture2D = load(ad_files[randi() % ad_files.size()])
 		sprite.texture  = tex

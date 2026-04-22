@@ -21,8 +21,10 @@ Globals="*uid://dcxsmoybxogfb"
 
 [display]
 
-window/size/viewport_width=1392
-window/size/viewport_height=1114
+window/size/viewport_width=948
+window/size/viewport_height=533
+window/stretch/mode="canvas_items"
+window/stretch/scale=0.55
 
 [input]
 
@@ -66,5 +68,6 @@ ui_down={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+renderer/rendering_method="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

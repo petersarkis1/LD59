@@ -174,12 +174,12 @@ func _draw_chrome(font: Font, wp: Vector2, ws: Vector2) -> void:
 	var tb2   := Rect2(wp.x + 2, tb2_y, ws.x - 4, TOOLBAR_H)
 	draw_rect(tb2, C_WIN_BG, true)
 	draw_line(Vector2(tb2.position.x, tb2.end.y - 1), Vector2(tb2.end.x, tb2.end.y - 1), C_DARK, 1)
-	var toolbar_btns := [["◄", "Back"], ["►", "Forward"], ["■", "Stop"], ["↺", "Refresh"], ["⌂", "Home"]]
+	var toolbar_btns := ["Back", "Forward", "Stop", "Refresh", "Home"]
 	var tbx   := tb2.position.x + 2.0
 	var tb_bh := TOOLBAR_H - 4.0
 	var tb_by := tb2_y + 2.0
 	for tbi in toolbar_btns.size():
-		var lbl : String = toolbar_btns[tbi][1]
+		var lbl : String = toolbar_btns[tbi]
 		var lsz := font.get_string_size(lbl, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE_SMALL)
 		var tbw := lsz.x + 6.0
 		var tb_r := Rect2(tbx, tb_by, tbw, tb_bh)

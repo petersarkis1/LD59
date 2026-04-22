@@ -59,9 +59,9 @@ const C_BTN_FACE   := Color(0.753, 0.753, 0.753)
 const C_MENUBAR    := Color(0.753, 0.753, 0.753)
 
 const TOS_FILES := [
-	"res://Assets/Phone/tos/axolotl.txt",
-	"res://Assets/Phone/tos/montypyt.txt", 
-	"res://Assets/Phone/tos/beemovie.txt"
+	"res://Assets/Phone/tos/axolotl.json",
+	"res://Assets/Phone/tos/montypyt.json",
+	"res://Assets/Phone/tos/beemovie.json"
 ]
 
 var TOS_LINES: Array[String] = []
@@ -69,14 +69,13 @@ var TOS_LINES: Array[String] = []
 
 func setup(pos: Vector2, size: Vector2) -> void:
 	var path: String = TOS_FILES[randi() % TOS_FILES.size()]
-	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		push_error("Could not open file: " + path)
+	var json: JSON = load(path)
+	if json == null:
+		push_error("Could not load: " + path)
 		return
 	TOS_LINES.clear()
-	while not file.eof_reached():
-		TOS_LINES.append(file.get_line())
-	file.close()
+	for line in json.data:
+		TOS_LINES.append(line)
 
 	_raw_size      = size
 	phone_position = pos
@@ -214,16 +213,14 @@ func _draw_chrome(font: Font, wp: Vector2, ws: Vector2) -> void:
 	var tb2   := Rect2(wp.x + 2, tb2_y, ws.x - 4, TOOLBAR_H)
 	draw_rect(tb2, C_WIN_BG, true)
 	draw_line(Vector2(tb2.position.x, tb2.end.y - 1), Vector2(tb2.end.x, tb2.end.y - 1), C_DARK, 1)
-	var toolbar_btns := [["◄", "Back"], ["►", "Forward"], ["■", "Stop"], ["↺", "Refresh"], ["⌂", "Home"]]
+	var toolbar_btns := ["Back", "Forward", "Stop", "Refresh", "Home"]
 	var tbx := tb2.position.x + 2.0
 	var tb_bh := TOOLBAR_H - 4.0
 	var tb_by := tb2_y + 2.0
 	for tbi in toolbar_btns.size():
-		var ico  : String = toolbar_btns[tbi][0]
-		var lbl  : String = toolbar_btns[tbi][1]
+		var lbl  : String = toolbar_btns[tbi]
 		var lsz  := font.get_string_size(lbl, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE_SMALL)
-		var isz  := font.get_string_size(ico, HORIZONTAL_ALIGNMENT_LEFT, -1, FONT_SIZE_SMALL)
-		var tbw  := maxf(lsz.x, isz.x) + 6.0
+		var tbw  := lsz.x + 6.0
 		var tb_r := Rect2(tbx, tb_by, tbw, tb_bh)
 		draw_rect(tb_r, C_WIN_BG, true)
 		_draw_win98_bevel(tb_r, true)
@@ -348,11 +345,17 @@ func _draw() -> void:
 		var ar   := Rect2(sb_x, ar_y, SCROLL_W, SCROLL_W)
 		draw_rect(ar, C_BTN_FACE, true)
 		_draw_win98_bevel(ar, true)
-		var glyph := "▲" if arrow == 0 else "▼"
-		var gsz   := font.get_string_size(glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8)
-		draw_string(font, Vector2(ar.position.x + (SCROLL_W - gsz.x) * 0.5,
-								  ar.position.y + (SCROLL_W + gsz.y) * 0.5 - 1),
-			glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, C_TEXT)
+		var acx := ar.position.x + SCROLL_W * 0.5
+		var acy := ar.position.y + SCROLL_W * 0.5
+		var as2 := 3.0
+		if arrow == 0:
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(acx, acy - as2), Vector2(acx + as2 * 1.3, acy + as2),
+				Vector2(acx - as2 * 1.3, acy + as2)]), C_TEXT)
+		else:
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(acx, acy + as2), Vector2(acx + as2 * 1.3, acy - as2),
+				Vector2(acx - as2 * 1.3, acy - as2)]), C_TEXT)
 
 	# ── Bottom button area ────────────────────────────────────────────────
 	var btn_area_h := BTN_AREA_H

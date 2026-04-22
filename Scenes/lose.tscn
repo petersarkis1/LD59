@@ -6,6 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://bojm0ys0ljt20" path="res://Assets/Audio/NIGHTMARENIGHTMARENIGHTMARE.wav" id="4_qgh6o"]
 
 [node name="title" type="Node2D" unique_id=705920851]
+position = Vector2(144, 0)
 scale = Vector2(0.265, 0.265)
 script = ExtResource("1_qgh6o")
 

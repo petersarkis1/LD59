@@ -6,9 +6,112 @@ var phone_position: Vector2
 var phone_size: Vector2
 
 # ── Card images ──────────────────────────────────────────────────────
-const HAMPTERS_DIR := "res://Assets/Phone/cards/hampters/"
 const PACK_TEXTURE := "res://Assets/Phone/cards/card_pack/pack.png"
 const CARD_COUNT := 10
+
+const ALL_HAMPTERS: Array[String] = [
+	"res://Assets/Phone/cards/hampters/hampter 1.png",
+	"res://Assets/Phone/cards/hampters/hampter 2.png",
+	"res://Assets/Phone/cards/hampters/hampter 3.png",
+	"res://Assets/Phone/cards/hampters/hampter 4.png",
+	"res://Assets/Phone/cards/hampters/hampter 5.png",
+	"res://Assets/Phone/cards/hampters/hampter 6.png",
+	"res://Assets/Phone/cards/hampters/hampter 7.png",
+	"res://Assets/Phone/cards/hampters/hampter 8.png",
+	"res://Assets/Phone/cards/hampters/hampter 9.png",
+	"res://Assets/Phone/cards/hampters/hampter 10.png",
+	"res://Assets/Phone/cards/hampters/hampter 11.png",
+	"res://Assets/Phone/cards/hampters/hampter 12.png",
+	"res://Assets/Phone/cards/hampters/hampter 13.png",
+	"res://Assets/Phone/cards/hampters/hampter 14.png",
+	"res://Assets/Phone/cards/hampters/hampter 15.png",
+	"res://Assets/Phone/cards/hampters/hampter 16.png",
+	"res://Assets/Phone/cards/hampters/hampter 17.png",
+	"res://Assets/Phone/cards/hampters/hampter 18.png",
+	"res://Assets/Phone/cards/hampters/hampter 19.png",
+	"res://Assets/Phone/cards/hampters/hampter 20.png",
+	"res://Assets/Phone/cards/hampters/hampter 21.png",
+	"res://Assets/Phone/cards/hampters/hampter 22.png",
+	"res://Assets/Phone/cards/hampters/hampter 24.png",
+	"res://Assets/Phone/cards/hampters/hampter 25.png",
+	"res://Assets/Phone/cards/hampters/hampter 26.png",
+	"res://Assets/Phone/cards/hampters/hampter 27.png",
+	"res://Assets/Phone/cards/hampters/hampter 28.png",
+	"res://Assets/Phone/cards/hampters/hampter 29.png",
+	"res://Assets/Phone/cards/hampters/hampter 30.png",
+	"res://Assets/Phone/cards/hampters/hampter 31.png",
+	"res://Assets/Phone/cards/hampters/hampter 32.png",
+	"res://Assets/Phone/cards/hampters/hampter 33.png",
+	"res://Assets/Phone/cards/hampters/hampter 34.png",
+	"res://Assets/Phone/cards/hampters/hampter 35.png",
+	"res://Assets/Phone/cards/hampters/hampter 36.png",
+	"res://Assets/Phone/cards/hampters/hampter 37.png",
+	"res://Assets/Phone/cards/hampters/hampter 38.png",
+	"res://Assets/Phone/cards/hampters/hampter 39.png",
+	"res://Assets/Phone/cards/hampters/hampter 40.png",
+	"res://Assets/Phone/cards/hampters/hampter 41.png",
+	"res://Assets/Phone/cards/hampters/hampter 42.png",
+	"res://Assets/Phone/cards/hampters/hampter 43.png",
+	"res://Assets/Phone/cards/hampters/hampter 44.png",
+	"res://Assets/Phone/cards/hampters/hampter 45.png",
+	"res://Assets/Phone/cards/hampters/hampter 46.png",
+	"res://Assets/Phone/cards/hampters/hampter 47.png",
+	"res://Assets/Phone/cards/hampters/hampter 48.png",
+	"res://Assets/Phone/cards/hampters/hampter 49.png",
+	"res://Assets/Phone/cards/hampters/hampter 50.png",
+	"res://Assets/Phone/cards/hampters/hampter 51.png",
+	"res://Assets/Phone/cards/hampters/hampter 52.png",
+	"res://Assets/Phone/cards/hampters/hampter 53.png",
+	"res://Assets/Phone/cards/hampters/hampter 54.png",
+	"res://Assets/Phone/cards/hampters/hampter 55.png",
+	"res://Assets/Phone/cards/hampters/hampter 56.png",
+	"res://Assets/Phone/cards/hampters/hampter 57.png",
+	"res://Assets/Phone/cards/hampters/hampter 58.png",
+	"res://Assets/Phone/cards/hampters/hampter 59.png",
+	"res://Assets/Phone/cards/hampters/hampter 60.png",
+	"res://Assets/Phone/cards/hampters/hampter 61.png",
+	"res://Assets/Phone/cards/hampters/hampter 62.png",
+	"res://Assets/Phone/cards/hampters/hampter 63.png",
+	"res://Assets/Phone/cards/hampters/hampter 64.png",
+	"res://Assets/Phone/cards/hampters/hampter 65.png",
+	"res://Assets/Phone/cards/hampters/hampter 66.png",
+	"res://Assets/Phone/cards/hampters/hampter 67.png",
+	"res://Assets/Phone/cards/hampters/hampter 68.png",
+	"res://Assets/Phone/cards/hampters/hampter 69.png",
+	"res://Assets/Phone/cards/hampters/hampter 70.png",
+	"res://Assets/Phone/cards/hampters/hampter 71.png",
+	"res://Assets/Phone/cards/hampters/hampter 72.png",
+	"res://Assets/Phone/cards/hampters/hampter 74.png",
+	"res://Assets/Phone/cards/hampters/hampter 75.png",
+	"res://Assets/Phone/cards/hampters/hampter 76.png",
+	"res://Assets/Phone/cards/hampters/hampter 77.png",
+	"res://Assets/Phone/cards/hampters/hampter 78.png",
+	"res://Assets/Phone/cards/hampters/hampter 79.png",
+	"res://Assets/Phone/cards/hampters/hampter 80.png",
+	"res://Assets/Phone/cards/hampters/hampter 81.png",
+	"res://Assets/Phone/cards/hampters/hampter 82.png",
+	"res://Assets/Phone/cards/hampters/hampter 83.png",
+	"res://Assets/Phone/cards/hampters/hampter 84.png",
+	"res://Assets/Phone/cards/hampters/hampter 85.png",
+	"res://Assets/Phone/cards/hampters/hampter 86.png",
+	"res://Assets/Phone/cards/hampters/hampter 87.png",
+	"res://Assets/Phone/cards/hampters/hampter 88.png",
+	"res://Assets/Phone/cards/hampters/hampter 89.png",
+	"res://Assets/Phone/cards/hampters/hampter 90.png",
+	"res://Assets/Phone/cards/hampters/hampter 91.png",
+	"res://Assets/Phone/cards/hampters/hampter 92.png",
+	"res://Assets/Phone/cards/hampters/hampter 93.png",
+	"res://Assets/Phone/cards/hampters/hampter 94.png",
+	"res://Assets/Phone/cards/hampters/hampter 95.png",
+	"res://Assets/Phone/cards/hampters/hampter 96.png",
+	"res://Assets/Phone/cards/hampters/hampter 97.png",
+	"res://Assets/Phone/cards/hampters/hampter 98.png",
+	"res://Assets/Phone/cards/hampters/hampter 99.png",
+	"res://Assets/Phone/cards/hampters/hampter 100.png",
+	"res://Assets/Phone/cards/hampters/hampter 101.png",
+	"res://Assets/Phone/cards/hampters/hampter 102.png",
+	"res://Assets/Phone/cards/hampters/Jace, the Mind HAMPTER.png",
+]
 
 # ── State ────────────────────────────────────────────────────────────
 enum Phase { RIPPING, SWIPING }
@@ -49,18 +152,8 @@ func setup(pos: Vector2, size: Vector2) -> void:
 	phone_position = pos
 	phone_size     = size
 
-	# Pick 5 random cards from the hampters folder
-	var dir := DirAccess.open(HAMPTERS_DIR)
-	var pool: Array[String] = []
-	if dir:
-		dir.list_dir_begin()
-		var fname := dir.get_next()
-		while fname != "":
-			if fname.ends_with(".png"):
-				pool.append(HAMPTERS_DIR + fname)
-			fname = dir.get_next()
-		dir.list_dir_end()
 	_pack_tex = load(PACK_TEXTURE)
+	var pool := ALL_HAMPTERS.duplicate()
 	pool.shuffle()
 	for i in CARD_COUNT:
 		_cards.append(load(pool[i]) as Texture2D)
@@ -148,15 +241,23 @@ func _draw_rip_phase(center: Vector2) -> void:
 			x += dot_gap
 		# "✂ TEAR HERE" label above the pack
 		var t := Time.get_ticks_msec() * 0.001
-		var label := "✂  TEAR HERE"
+		var label := "TEAR HERE"
 		var lsz := font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20)
 		var lx := center.x - lsz.x * 0.5
 		var above_y := pack_y - 14.0
 		draw_string(font, Vector2(lx, above_y), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color(1, 1, 1, tear_alpha))
-		# Animated ◄► arrow pulsing below label
 		var pulse := 0.6 + 0.4 * sin(t * 4.0)
-		var asz := font.get_string_size("◄  ►", HORIZONTAL_ALIGNMENT_LEFT, -1, 26)
-		draw_string(font, Vector2(center.x - asz.x * 0.5, above_y + 26), "◄  ►", HORIZONTAL_ALIGNMENT_LEFT, -1, 26, Color(1, 1, 1, tear_alpha * pulse))
+		var arr_col := Color(1, 1, 1, tear_alpha * pulse)
+		var ay: float = above_y + 16.0
+		var as2 := 10.0
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(center.x - 20,        ay),
+			Vector2(center.x - 20 - as2 * 1.4, ay - as2 * 0.5),
+			Vector2(center.x - 20 - as2 * 1.4, ay + as2 * 0.5)]), arr_col)
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(center.x + 20,        ay),
+			Vector2(center.x + 20 + as2 * 1.4, ay - as2 * 0.5),
+			Vector2(center.x + 20 + as2 * 1.4, ay + as2 * 0.5)]), arr_col)
 
 
 func _draw_pack_sheen(x: float, y: float, w: float, h: float) -> void:
@@ -228,11 +329,22 @@ func _draw_swipe_phase(center: Vector2) -> void:
 
 	var t2 := Time.get_ticks_msec() * 0.001
 	var pulse2 := 0.6 + 0.4 * sin(t2 * 4.0)
-	var hint := "◄  SWIPE  ►"
+	var hint := "SWIPE"
 	var hsz  := font.get_string_size(hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 22)
-	draw_string(font,
-		Vector2(center.x - hsz.x * 0.5, card_y + card_h + 56),
-		hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color(1, 1, 1, pulse2))
+	var hint_col := Color(1, 1, 1, pulse2)
+	var hint_y: float = card_y + card_h + 56
+	draw_string(font, Vector2(center.x - hsz.x * 0.5, hint_y),
+		hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, hint_col)
+	var arr_s := 8.0
+	var gap   := hsz.x * 0.5 + 14.0
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(center.x - gap,          hint_y - arr_s * 0.5 - 6),
+		Vector2(center.x - gap - arr_s * 1.4, hint_y - 11),
+		Vector2(center.x - gap,          hint_y - arr_s * 1.5 - 6)]), hint_col)
+	draw_colored_polygon(PackedVector2Array([
+		Vector2(center.x + gap,          hint_y - arr_s * 0.5 - 6),
+		Vector2(center.x + gap + arr_s * 1.4, hint_y - 11),
+		Vector2(center.x + gap,          hint_y - arr_s * 1.5 - 6)]), hint_col)
 
 
 func _draw_card(rect: Rect2, idx: int) -> void:

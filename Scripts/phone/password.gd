@@ -21,7 +21,6 @@ const PASSWORDS: Array = [
 ]
 
 # Display glyphs for each symbol (for LCD readout)
-const SYM_GLYPH: Array[String] = ["▶", "◀", "■", "●", "▶▶", "◀◀"]
 const SYM_LABEL: Array[String] = ["PLAY", "BACK", "STOP", "REC", "FF", "REW"]
 
 # Button grid layout — maps grid position (0-5) to Sym value
@@ -144,6 +143,7 @@ func _draw() -> void:
 	var font: Font = ThemeDB.fallback_font
 
 	draw_rect(Rect2(phone_position, phone_size), Color(0.05, 0.05, 0.06), true)
+
 	draw_rect(Rect2(_win_rect.position + Vector2(3, 3), _win_rect.size), Color(0, 0, 0, 0.6), true)
 	draw_rect(_win_rect, COL_WIN_BG, true)
 	draw_rect(_win_rect, Color(0.35, 0.35, 0.40), false, 1.0)
@@ -215,9 +215,7 @@ func _draw() -> void:
 	var inp_col: Color = COL_RED if _flash_wrong else COL_LCD_GREEN
 	if _current_input.is_empty():
 		if _blink_on and not _flash_wrong:
-			var cs := font.get_string_size("▮", HORIZONTAL_ALIGNMENT_LEFT, -1, 28)
-			draw_string(font, Vector2(dx + dw * 0.5 - cs.x * 0.5, inp_cy),
-				"▮", HORIZONTAL_ALIGNMENT_LEFT, -1, 28, COL_LCD_DIM)
+			draw_rect(Rect2(dx + dw * 0.5 - 6.0, inp_cy - 22.0, 12.0, 26.0), COL_LCD_DIM, true)
 	else:
 		_draw_lcd_symbol_row(_current_input, dx + dw * 0.5, inp_cy, 30, inp_col,
 			_blink_on and not _flash_wrong)
@@ -232,6 +230,16 @@ func _draw() -> void:
 	var ph_frac: float = fmod(_scroll_t * 0.03, 1.0)
 	draw_rect(Rect2(_seek_rect.position.x + ph_frac * (_seek_rect.size.x - 8.0),
 		_seek_rect.position.y, 8.0, _seek_rect.size.y), COL_GOLD, true)
+
+	# ── Instruction ───────────────────────────────────────────────────
+	var instr := "ENTER THE PATTERN"
+	var instr_sz := font.get_string_size(instr, HORIZONTAL_ALIGNMENT_LEFT, -1, 22)
+	var instr_x := phone_position.x + phone_size.x * 0.5 - instr_sz.x * 0.5
+	var instr_y: float = (_btn_rects[0] as Rect2).position.y - 10.0
+	draw_string(font, Vector2(instr_x + 1, instr_y + 1), instr,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color(0, 0, 0, 0.7))
+	draw_string(font, Vector2(instr_x, instr_y), instr,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, 22, COL_LCD_GREEN)
 
 	# ── Symbol buttons ────────────────────────────────────────────────
 	var mouse := get_local_mouse_position()
@@ -253,39 +261,67 @@ func _draw() -> void:
 	var del_ofs: Vector2 = Vector2(1, 1) if del_hov else Vector2.ZERO
 	_draw_winamp_btn(Rect2(_del_rect.position + del_ofs, _del_rect.size),
 		Color(0.26, 0.16, 0.16) if del_hov else Color(0.20, 0.13, 0.13), del_hov)
-	var del_sz := font.get_string_size("⌫  DEL", HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
+	var del_sz := font.get_string_size("DEL", HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 	draw_string(font,
 		Vector2(_del_rect.position.x + del_ofs.x + (_del_rect.size.x - del_sz.x) * 0.5,
 				_del_rect.position.y + del_ofs.y + (_del_rect.size.y + del_sz.y) * 0.5 - 4.0),
-		"⌫  DEL", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(0.90, 0.55, 0.55))
+		"DEL", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(0.90, 0.55, 0.55))
 
 	var en_hov: bool    = _enter_rect.has_point(mouse)
 	var en_ofs: Vector2 = Vector2(1, 1) if en_hov else Vector2.ZERO
 	_draw_winamp_btn(Rect2(_enter_rect.position + en_ofs, _enter_rect.size),
 		Color(0.12, 0.24, 0.12) if en_hov else Color(0.10, 0.18, 0.10), en_hov)
-	var en_sz := font.get_string_size("▶  PLAY", HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
+	var en_sz := font.get_string_size("PLAY", HORIZONTAL_ALIGNMENT_LEFT, -1, 18)
 	draw_string(font,
 		Vector2(_enter_rect.position.x + en_ofs.x + (_enter_rect.size.x - en_sz.x) * 0.5,
 				_enter_rect.position.y + en_ofs.y + (_enter_rect.size.y + en_sz.y) * 0.5 - 4.0),
-		"▶  PLAY", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(0.45, 0.92, 0.45))
+		"PLAY", HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color(0.45, 0.92, 0.45))
 
 
-# Draw a row of transport symbol glyphs centered on (cx, cy)
+# Draw a row of transport symbols (vectors) centered on (cx, cy)
 func _draw_lcd_symbol_row(seq: Array, cx: float, cy: float,
 		font_sz: int, col: Color, blink_cursor: bool) -> void:
-	var font: Font  = ThemeDB.fallback_font
-	var spacing:    float = float(font_sz) * 1.8
-	var total_w:    float = spacing * (seq.size() - 1)
-	var start_x:    float = cx - total_w * 0.5
+	var icon_size: float = float(font_sz) * 1.1
+	var spacing:   float = float(font_sz) * 1.8
+	var total_w:   float = spacing * (seq.size() - 1)
+	var start_x:   float = cx - total_w * 0.5
 	for i in seq.size():
-		var glyph: String = SYM_GLYPH[seq[i] as int]
-		var gs := font.get_string_size(glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, font_sz)
-		draw_string(font, Vector2(start_x + i * spacing - gs.x * 0.5, cy),
-			glyph, HORIZONTAL_ALIGNMENT_LEFT, -1, font_sz, col)
+		var ix: float = start_x + i * spacing
+		var r := Rect2(ix - icon_size * 0.5, cy - icon_size * 0.5 - icon_size * 0.1,
+			icon_size, icon_size)
+		_draw_transport_symbol_colored(seq[i] as int, r, col)
 	if blink_cursor:
 		var cursor_x: float = cx + total_w * 0.5 + spacing
-		draw_string(font, Vector2(cursor_x, cy), "▮",
-			HORIZONTAL_ALIGNMENT_LEFT, -1, font_sz, col.darkened(0.3))
+		var ch: float = float(font_sz) * 0.9
+		draw_rect(Rect2(cursor_x - float(font_sz) * 0.3, cy - ch * 0.8, float(font_sz) * 0.55, ch),
+			col.darkened(0.3), true)
+
+
+func _draw_transport_symbol_colored(sym: int, r: Rect2, col: Color) -> void:
+	var cx: float = r.position.x + r.size.x * 0.5
+	var cy: float = r.position.y + r.size.y * 0.5
+	var s:  float = minf(r.size.x, r.size.y) * 0.38
+	match sym:
+		Sym.PLAY:
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(cx - s, cy - s), Vector2(cx + s * 1.2, cy), Vector2(cx - s, cy + s)]), col)
+		Sym.BACK:
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(cx + s, cy - s), Vector2(cx - s * 1.2, cy), Vector2(cx + s, cy + s)]), col)
+		Sym.STOP:
+			draw_rect(Rect2(cx - s, cy - s, s * 2.0, s * 2.0), col, true)
+		Sym.REC:
+			draw_circle(Vector2(cx, cy), s, col)
+		Sym.FF:
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(cx - s * 1.3, cy - s), Vector2(cx, cy), Vector2(cx - s * 1.3, cy + s)]), col)
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(cx, cy - s), Vector2(cx + s * 1.3, cy), Vector2(cx, cy + s)]), col)
+		Sym.REW:
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(cx + s * 1.3, cy - s), Vector2(cx, cy), Vector2(cx + s * 1.3, cy + s)]), col)
+			draw_colored_polygon(PackedVector2Array([
+				Vector2(cx, cy - s), Vector2(cx - s * 1.3, cy), Vector2(cx, cy + s)]), col)
 
 
 # Draw classic MP3 transport icons as vector shapes

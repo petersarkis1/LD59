@@ -8,8 +8,8 @@ const GAMES = ["ads", "pattern", "password", "case-opening", "tos", "cards"]
 enum State {IDLE, PLAYING, FINISHED}
 var _state: State = State.IDLE
 var _current_game: Node2D = null
+var _current_game_name: String = ""
 
-var _remaining_games: Array = []
 
 @export var phone_size: Vector2 = Vector2(338, 600):
 	set(v):
@@ -129,16 +129,15 @@ func _show_idle_screen() -> void:
 
 
 func _start_game() -> void:
-	if _remaining_games.is_empty():
-		_remaining_games = GAMES.duplicate()
-		_remaining_games.shuffle()
+	# ── To test a specific game, uncomment the line below and comment out the block beneath it ──
+	#var game_name = "tos"  # options: ads, pattern, password, case-opening, tos, cards
 
-	# 0:ads, 1:pattern, 2:password, 3:case-opening, 4:tos, 5:cards
-	# uncomment below line for testing individiual games.
-	#var game_name = GAMES[3]
-
-	# coment below line for testing individual games. 
-	var game_name = _remaining_games.pop_back()
+	#── Normal game flow — comment this block out when testing a specific game ──
+	if Globals.remaining_minigames.is_empty():
+		Globals.remaining_minigames = GAMES.duplicate()
+		Globals.remaining_minigames.shuffle()
+	_current_game_name = Globals.remaining_minigames.back()
+	var game_name = _current_game_name
 	
 
 	var script = load("res://Scripts/phone/%s.gd" % game_name)
@@ -150,6 +149,7 @@ func _start_game() -> void:
 
 
 func _on_game_finished() -> void:
+	Globals.remaining_minigames.erase(_current_game_name)
 	finished.emit()
 	_transition(State.FINISHED)
 

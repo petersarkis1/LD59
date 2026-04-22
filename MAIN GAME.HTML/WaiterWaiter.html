@@ -167,7 +167,7 @@ const engine = new Engine(GODOT_CONFIG);
 	});
 
 	if (missing.length !== 0) {
-		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
+		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && false) {
 			let serviceWorkerRegistrationPromise;
 			try {
 				serviceWorkerRegistrationPromise = navigator.serviceWorker.getRegistration();
